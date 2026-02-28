@@ -1,0 +1,86 @@
+{
+  "data": {
+    "allTrustFaqs": {
+      "totalCount": 5,
+      "edgeCount": 5,
+      "pageInfo": {
+        "hasNextPage": false,
+        "hasPreviousPage": false,
+        "startCursor": "YXJyYXljb25uZWN0aW9uOjA=",
+        "endCursor": "YXJyYXljb25uZWN0aW9uOjQ="
+      },
+      "edges": [
+        {
+          "cursor": "YXJyYXljb25uZWN0aW9uOjA=",
+          "node": {
+            "id": "VHJ1c3RGYXE6YzZkYzliMWYtZTk2Ni00ZjdjLWE0ZWItNTIxOTQ3MzY4Yzhh",
+            "question": "What API security controls are implemented in the Vault Defense platform?",
+            "answer": "Vault Defense implements a defense-in-depth API security strategy with multiple layers of protection including OWASP API Security Top 10 mitigations, rate limiting with adaptive thresholds, JWT validation with short-lived tokens, request signing, and payload validation. All APIs are protected by Web Application Firewalls with custom rule sets, require mutual TLS for sensitive endpoints, and undergo automated security scanning in CI/CD pipelines. We maintain real-time API discovery and threat detection through our security monitoring infrastructure.",
+            "category": "Cloud Security",
+            "searchText": "What API security controls are implemented in the Vault Defense platform? Vault Defense implements a defense-in-depth API security strategy with multiple layers of protection including OWASP API Security Top 10 mitigations, rate limiting with adaptive thresholds, JWT validation with short-lived tokens, request signing, and payload validation. All APIs are protected by Web Application Firewalls with custom rule sets, require mutual TLS for sensitive endpoints, and undergo automated security scanning in CI/CD pipelines. We maintain real-time API discovery and threat detection through our security monitoring infrastructure. Cloud Security",
+            "createdAt": "2025-12-31T16:47:02.587878+00:00",
+            "createdBy": "jean.bartik@email.com",
+            "updatedAt": "2026-01-16T19:52:47.810628+00:00",
+            "updatedBy": "shafi.goldwasser@email.com"
+          }
+        },
+        {
+          "cursor": "YXJyYXljb25uZWN0aW9uOjE=",
+          "node": {
+            "id": "VHJ1c3RGYXE6NjQ0OTJiZDMtOGU1ZC00YmI4LWJmNjItMzFiYjRlNGQ1YTU1",
+            "question": "How is customer data segregated in the Vault Defense multi-tenant architecture?",
+            "answer": "Vault Defense implements logical segregation through strict tenant isolation at the application, database, and infrastructure layers. Each customer's data is encrypted with unique keys using envelope encryption, with strict IAM policies preventing cross-tenant access. All database queries enforce tenant context through row-level security policies, and our application layer validates tenant boundaries before any data access. For customers with regulatory requirements, we offer dedicated infrastructure options with physical segregation.",
+            "category": "Data Security",
+            "searchText": "How is customer data segregated in the Vault Defense multi-tenant architecture? Vault Defense implements logical segregation through strict tenant isolation at the application, database, and infrastructure layers. Each customer's data is encrypted with unique keys using envelope encryption, with strict IAM policies preventing cross-tenant access. All database queries enforce tenant context through row-level security policies, and our application layer validates tenant boundaries before any data access. For customers with regulatory requirements, we offer dedicated infrastructure options with physical segregation. Data Security",
+            "createdAt": "2025-12-31T16:47:02.618943+00:00",
+            "createdBy": "marvin.minsky@email.com",
+            "updatedAt": "2026-01-16T19:52:47.817794+00:00",
+            "updatedBy": "john.backus@email.com"
+          }
+        },
+        {
+          "cursor": "YXJyYXljb25uZWN0aW9uOjI=",
+          "node": {
+            "id": "VHJ1c3RGYXE6ODg4Njg2YzQtMjZmZi00MWMwLTkyZDgtYzdkYmQyYTUxMjA4",
+            "question": "Has Vault Defense experienced any security incidents requiring customer notification?",
+            "answer": "Vault Defense maintains a perfect security track record with zero reportable security incidents since inception. We conduct quarterly third-party penetration tests, annual SOC 2 Type II audits, and maintain a dedicated incident response team that performs regular tabletop exercises. Our proactive security posture includes 24/7 threat monitoring, automated vulnerability scanning, and a responsible disclosure program that has helped us identify and remediate potential issues before they could impact customers.",
+            "category": "Organizational Security",
+            "searchText": "Has Vault Defense experienced any security incidents requiring customer notification? Vault Defense maintains a perfect security track record with zero reportable security incidents since inception. We conduct quarterly third-party penetration tests, annual SOC 2 Type II audits, and maintain a dedicated incident response team that performs regular tabletop exercises. Our proactive security posture includes 24/7 threat monitoring, automated vulnerability scanning, and a responsible disclosure program that has helped us identify and remediate potential issues before they could impact customers. Organizational Security",
+            "createdAt": "2025-12-31T16:47:02.631315+00:00",
+            "createdBy": "claude.shannon@email.com",
+            "updatedAt": "2026-01-16T19:52:47.822977+00:00",
+            "updatedBy": "noam.chomsky@email.com"
+          }
+        },
+        {
+          "cursor": "YXJyYXljb25uZWN0aW9uOjM=",
+          "node": {
+            "id": "VHJ1c3RGYXE6NGU0OWNkMTktMGU0YS00ZDJhLWFkY2YtYzQxNWJjZmRiMWFm",
+            "question": "What tracking technologies does the Vault Defense platform use?",
+            "answer": "Vault Defense uses only essential cookies required for platform functionality and security. We implement Auth0 for authentication (session management, MFA tokens) and Sentry for error monitoring (diagnostic data). No tracking, analytics, or marketing cookies are used. All cookies are HttpOnly and Secure flags enabled, contain no PII beyond authentication identifiers, and automatically expire with session termination. Customers in regulated industries can request our detailed cookie inventory and data processing agreements.",
+            "category": "Privacy",
+            "searchText": "What tracking technologies does the Vault Defense platform use? Vault Defense uses only essential cookies required for platform functionality and security. We implement Auth0 for authentication (session management, MFA tokens) and Sentry for error monitoring (diagnostic data). No tracking, analytics, or marketing cookies are used. All cookies are HttpOnly and Secure flags enabled, contain no PII beyond authentication identifiers, and automatically expire with session termination. Customers in regulated industries can request our detailed cookie inventory and data processing agreements. Privacy",
+            "createdAt": "2025-12-31T16:47:02.643684+00:00",
+            "createdBy": "niklaus.wirth@email.com",
+            "updatedAt": "2026-01-16T19:52:47.827870+00:00",
+            "updatedBy": "brian.kernighan@email.com"
+          }
+        },
+        {
+          "cursor": "YXJyYXljb25uZWN0aW9uOjQ=",
+          "node": {
+            "id": "VHJ1c3RGYXE6YWNkZTY2MTUtZjlmYS00NThhLWFiZTAtMjBhMWUzM2UzNTA3",
+            "question": "Describe Vault Defense's security monitoring and incident response capabilities.",
+            "answer": "Vault Defense operates a 24/7/365 Security Operations Center (SOC) staffed by certified security analysts providing continuous threat detection, investigation, and response. Our security stack includes next-gen SIEM with UEBA capabilities, EDR on all infrastructure, and cloud-native security monitoring. The SOC follows NIST 800-61 incident response framework with defined SLAs for triage (15 min), containment (1 hour), and resolution (based on severity). We conduct monthly red team exercises and maintain relationships with leading incident response firms for surge capacity. All security events are correlated and retained for 1 year minimum for forensic analysis.",
+            "category": "Security Monitoring",
+            "searchText": "Describe Vault Defense's security monitoring and incident response capabilities. Vault Defense operates a 24/7/365 Security Operations Center (SOC) staffed by certified security analysts providing continuous threat detection, investigation, and response. Our security stack includes next-gen SIEM with UEBA capabilities, EDR on all infrastructure, and cloud-native security monitoring. The SOC follows NIST 800-61 incident response framework with defined SLAs for triage (15 min), containment (1 hour), and resolution (based on severity). We conduct monthly red team exercises and maintain relationships with leading incident response firms for surge capacity. All security events are correlated and retained for 1 year minimum for forensic analysis. Security Monitoring",
+            "createdAt": "2025-12-31T16:47:02.655987+00:00",
+            "createdBy": "robert.martin@email.com",
+            "updatedAt": "2026-01-16T19:52:47.832747+00:00",
+            "updatedBy": "martin.fowler@email.com"
+          }
+        }
+      ]
+    }
+  }
+}

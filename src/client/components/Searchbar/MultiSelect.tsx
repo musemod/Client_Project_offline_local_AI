@@ -11,6 +11,8 @@ const MultiSelect: React.FC<MultiSelectProps> = ({ onFilterChange }) => { //pass
     { value: "Cloud Security", label: "Cloud Security" },
     { value:  "Secure Development", label: "Secure Development" },
     { value: "Data Security", label: "Data Security" },
+    // { value: "Privacy", label: "Privacy" },
+    // { value: "Security Monitoring", label: "Security Monitoring"}
   ];
 
 
