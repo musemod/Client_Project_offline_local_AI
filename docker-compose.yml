@@ -42,7 +42,7 @@ services:
       - "11434:11434"
     volumes:
       - ollama_models:/root/.ollama # persists downloaded models
-    runtime: nvidia # enables NVIDIA GPU (legacy syntax - both this and deploy.resources work)
+    runtime: nvidia # enables NVIDIA container runtime, allowing container to access GPU (legacy syntax - both this and more modern "deploy" syntax work)
     init: true # handles zombie processes, recommended for containers
     environment:
       - OLLAMA_HOST=0.0.0.0 # listen on all interfaces
@@ -52,8 +52,8 @@ services:
       - OLLAMA_KEEP_ALIVE=-1 # keep models loaded forever (-1 = infinite)
       - OLLAMA_DEBUG=0
       - OLLAMA_CONTEXT_LENGTH=8192 # max context window size in tokens (affects VRAM)
-      - NVIDIA_VISIBLE_DEVICES=all # which GPUs to expose to container
-      - NVIDIA_DRIVER_CAPABILITIES=compute,utility # required GPU capabilities
+      - NVIDIA_VISIBLE_DEVICES=all # which GPUs to expose to container 
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility # required GPU capabilities (ensures neccesary CUDA drivers loaded inside container)
     restart: unless-stopped
     healthcheck:
       test: [ "CMD", "ollama", "list" ] # checks if Ollama is responding
