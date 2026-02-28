@@ -1,4 +1,4 @@
-# Project Name
+# Client Project
 This is my fork of OSP1-ClientProject where I developed the offline / local AI branch  
 feature. The original team project can be found at: https://github.com/kevinortiz43/OSP1-ClientProject/
 
