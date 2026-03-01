@@ -16,6 +16,7 @@ This setup is configured for **Linux Ubuntu 22.04 / WSL2** with an **NVIDIA GPU 
 - [Downloading Models from HuggingFace](#downloading-models-directly-from-huggingface)
 - [switch-model.sh](#switch-modelsh)
 - [Installing Bun](#installing-bun)
+- [Resolving Port Conflicts](#resolving-port-conflicts)
 - [Application One-Time Setup](#application-one-time-setup)
 - [Running the Application](#running-the-application)
 - [pgAdmin Walkthrough](#pgadmin-walkthrough)
