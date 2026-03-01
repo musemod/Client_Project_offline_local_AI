@@ -2,7 +2,7 @@
 
 This setup is configured for **Linux Ubuntu 22.04 / WSL2** with an **NVIDIA GPU with at least 24GB VRAM (e.g., RTX 4090)**. Before proceeding, please research the capabilities and limitations of your hardware (GPU VRAM, system RAM, CPU cores) and intended AI model(s).
 
-> **Note**: This can be customized for use with computers that run models only on CPU, but you will have to change configuration in `docker-compose.yml` file and research settings for your specific setup.
+> **Note**: This can be customized for use with computers that run models only on CPU, but you will have to change configuration in `docker-compose.yml` and research settings for your specific setup.
 
 ## Table of Contents
 - [System Requirements](#system-requirements)
@@ -123,7 +123,7 @@ MODEL_URL=http://ollama:11434/v1/chat/completions  # OpenAI-compatible endpoint
 Comments have been added to docker-compose.yml to show how ollama and backend is configured for local AI setup with Nvida GPU capability. Other options have been added in the comments.
 
 ### start-dev.sh
-`start-dev.sh` is a Linux-based preloading script to warm 2 models and start the application. Run this script only if your GPU has enough capacity to preload 2 models (see model VRAM requirements section) and only AFTER you have already done 1st-time setup. 
+`start-dev.sh` is a Linux-based preloading script to warm 2 models and start the application. Run this script ONLY if your GPU has enough capacity to preload 2 models (see model VRAM requirements section) and only AFTER you have already done 1st-time setup. 
 
 Preloading and warming models avoids forcing users to wait for models to load before running. It also prevents truncated AI model responses (due to models not being completely warmed up) and gives more consistency in AI model response behavior.
 
@@ -155,8 +155,8 @@ After customizing start-dev.sh to your preferred AI models, make the script exec
 ### switch-model.sh
 `switch-model.sh` enables switching of txt2SQL models. 
 
-This script overwrites the .env file so that `TEXT2SQL_MODEL` variable  is changed.
-It also verifies models are pulled and restarts the backend container.
+This script overwrites the .env file so that `TEXT2SQL_MODEL` variable is changed.
+It also verifies models are pulled and restarts the backend Docker container.
 
 Make script executable by running `chmod +x switch-model.sh`. 
 
@@ -189,7 +189,7 @@ Save the file and exit the editor (in nano, press Ctrl+O, then Enter, then Ctrl+
 ### 5. Verify installation
 `bun --version`
 
-### Application One-Time Setup
+## Application One-Time Setup
 
  **Research** your hardware capabilities and limitations
 **Customize** configuration files:
@@ -199,6 +199,46 @@ Save the file and exit the editor (in nano, press Ctrl+O, then Enter, then Ctrl+
 
 **Run initial setup** (installs dependencies, creates containers, seeds database):
 `bun i && bun run setup`
+
+
+## Resolving Port Conflicts
+
+If you encounter port conflicts during setup, particularly with port `5432` (PostgreSQL) or port `11434` (Ollama), follow these steps to identify and resolve the issue.
+
+### 1. Identify the Process Using the Port
+
+First, determine which process is occupying the port you need:
+
+**Linux/macOS:**
+```bash
+# Check port 5432 (PostgreSQL)
+sudo lsof -i :5432
+
+# Check port 11434 (Ollama)
+sudo lsof -i :11434
+The output will show the Process ID (PID) and the name of the application using the port.
+```
+
+### 2. Resolve the Port Conflict
+Once you've identified the process, you have 2 options to resolve the conflict:
+
+#### Option A: Stop the Conflicting Service
+If the port is being used by a local service you don't need running simultaneously:
+
+```bash
+For PostgreSQL (port 5432):
+
+# Stop PostgreSQL service
+sudo systemctl stop postgresql
+For Ollama (port 11434):
+
+
+# Stop Ollama service
+sudo systemctl stop ollama
+```
+
+#### Option B: Use a Different Port for Your Container
+Alternatively, you can configure your application to use a different port by modifying the port mapping in `docker-compose.yml`.
 
 ## Running the application
 

@@ -2,7 +2,7 @@
 
 ## Default Models
 
-The application uses two default models:
+The application uses 2 default models:
 
 | Model | Purpose | HuggingFace Link |
 |-------|---------|------------------|
@@ -13,7 +13,7 @@ The application uses two default models:
 
 ## Model Format
 
-Both models use **GGUF format** for two primary reasons:
+Both models use **GGUF format** for 2 primary reasons:
 - **Storage efficiency**: Smaller file footprint
 - **CPU compatibility**: Maximum compatibility with CPU-only setups (llama.cpp runs GGUF under the hood)
 
