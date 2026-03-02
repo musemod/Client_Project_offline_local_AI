@@ -192,12 +192,12 @@ Save the file and exit the editor (in nano, press Ctrl+O, then Enter, then Ctrl+
 
 ## Application One-Time Setup
 
- **Research** your hardware capabilities and limitations
-**Customize** configuration files:
-`.env `- Set your model preferences
-`docker-compose.yml` - Adjust GPU/CPU settings if needed
-`start-dev.sh` and `switch-model.sh` (optional)
-**Add** a **judgments** folder inside of aiTest if not present.
+- **Research** your hardware capabilities and limitations
+- **Customize** configuration files:
+- `.env `- Set your model preferences
+- `docker-compose.yml` - Adjust GPU/CPU settings if needed
+- `start-dev.sh` and `switch-model.sh` (optional)
+- **Add** a **judgments** folder inside of aiTest if not present.
 
 **Run initial setup** (installs dependencies, creates containers, seeds database):
 `bun i && bun run setup`
@@ -245,8 +245,11 @@ Alternatively, you can configure your application to use a different port by mod
 ## Running the application
 
 If you have GPU capacity (see model VRAM requirements), it is recommended to run:
+
 `./start-dev.sh` to preload and warm 2 models and start the application
+
 You can switch `TEXT2SQL_MODEL` as such:
+
 `./switch-model.sh arctic` # switch to arctic model
 
 Otherwise, run `docker compose up -d`
