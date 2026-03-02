@@ -34,11 +34,14 @@ If the TEXT2SQL_MODEL is required:
 4. Proceed to response generation
 
 ### 4. Response Generation
-Two result paths converge at the AI_RESPONSE_MODEL:
+All results paths converge at the AI_RESPONSE_MODEL:
 - **Keyword search results**
 - **AI-generated query results**
+-**Cached query results**
 
 The response model converts raw data into human-friendly format before returning to the frontend chatbot.
+
+NOTE: This flow could be improved if cache were set AFTER human-friendly responses were generated and validated, so valid responses could immediately be returned to the user and responses would not need to be generated every time. However, a more robust validation step would be necessary to prevent invalid responses from being cached.
 
 ### 5. Non-Blocking Evaluation
 The JUDGE_MODEL operates asynchronously, not blocking user response:
@@ -54,8 +57,48 @@ src/server/aiTest/judgements/
 
 ## Important Notes
 
-> **Disclaimer**: This flow prototypes a production pipeline but was developed in under one month. It demonstrates architectural patterns rather than production-ready robustness. Each step mimics real-world behavior but lacks the comprehensive error handling, validation, and optimization required for production deployment.
+> **Disclaimer**: This flow prototypes a production pipeline but was developed in under two weeks. It demonstrates architectural patterns rather than production-ready robustness. Each step mimics real-world behavior but lacks the comprehensive error handling, validation, and optimization required for production deployment.
 
+ ### AI Text-to-SQL 
+ * **Purpose**:
+ * - Provide quick feedback during prompt engineering using lightweight, open source models
+ * - Test workflow integration before implementing proper SQL generation
+ * - Mock the behavior of a text-to-SQL system
+ 
+ * **Limitations**:
+ * - Prompt tailored to specific mock data and weaker AI model
+ * - Applies post-processing fixes that mask model errors
+ * - Uses ILIKE for simplicity (not performance-optimized)
+
+### AI Evaluation
+  * **Purpose**:
+ * - Enable rapid evaluation of text-to-SQL outputs during development and prompt engineering
+ * - Provide immediate feedback on SQL generation quality using lightweight open-source judge models
+ * - Support hybrid validation strategy:
+ *   a. Match results count comparison when test set contains ground truth
+ *   b. LLM-as-judge evaluation for ad-hoc queries without predefined expectations
+ * - Mock the behavior of a production evaluation system for testing workflows
+ * -Saves logs under aiTest/judgements folder 
+ * 
+ * **Limitations**:
+ * - Result count comparison only validates row volume, not data correctness or quality
+ *   (e.g., correct count but wrong records would pass validation)
+ * - LLM-as-judge accuracy is bounded by the judge model's capabilities:
+ *   * Smaller models may miss subtle semantic differences
+ *   * No guaranteed consistency in evaluation criteria
+ *   * Potential bias based on model training data
+ * - Lacks calibration against human expert judgments
+
+ ### Caching 
+ * **Purpose**:
+ * - Provide quick in-memory caching (not heavy Redis implementation)
+ * - Test workflow integration before implementing proper caching strategies
+ * - Mock the behavior of a caching system
+ * 
+ * **Limitations**:
+ * - Works only with small datasets
+ * - Needs more thoughtful implementation (i.e. after AI response generation but only if that response were validated)
+ 
 ## Related Documentation
 - [Main README](README.md) - Project overview
 - [Setup Guide](setup.md) - Comprehensive setup guide

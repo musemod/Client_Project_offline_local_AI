@@ -65,7 +65,7 @@ The flow implements a cache-aside pattern:
 2. **Keyword search**: Simple text matching (also cache-first)
 3. **AI path**: Complex query handling via model inference
 
-**Note**: This flow prototypes a more robust pipeline. Developed in under one month, it's not production-ready but demonstrates core concepts.
+**Disclaimer**: This AI flow merely mimics a more robust pipeline. Developed in under two weeks, it's not production-ready but merely demonstrates architectural patterns.  
 
 ### Dynamic Database Seeding
 
