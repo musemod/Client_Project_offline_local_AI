@@ -197,6 +197,7 @@ Save the file and exit the editor (in nano, press Ctrl+O, then Enter, then Ctrl+
 `.env `- Set your model preferences
 `docker-compose.yml` - Adjust GPU/CPU settings if needed
 `start-dev.sh` and `switch-model.sh` (optional)
+**Add** a **judgments** folder inside of aiTest if not present.
 
 **Run initial setup** (installs dependencies, creates containers, seeds database):
 `bun i && bun run setup`
