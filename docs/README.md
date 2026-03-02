@@ -51,7 +51,7 @@ This setup includes a preloading script for seamless model switching. Both model
 - **Cache-aside pattern**: Optimize for frequent queries
 - **Query routing**: Keyword text search vs AI path
 - **Text-to-SQL model**: Natural language to database queries
-- **Response generation model**: SQL results to human-readable text
+- **Response generation model**: SQL results to human-readable textg
 - **LLM-as-Judge**: Automated quality evaluation
 - **Non-blocking evaluation**: Async result scoring
 - **Dynamic database seeding**: Automated ETL pipeline
@@ -65,7 +65,9 @@ The flow implements a cache-aside pattern:
 2. **Keyword search**: Simple text matching (also cache-first)
 3. **AI path**: Complex query handling via model inference
 
-**Disclaimer**: This AI flow merely mimics a more robust pipeline. Developed in under two weeks, it's not production-ready but merely demonstrates architectural patterns.  
+```
+Disclaimer: This AI flow merely mimics a more robust pipeline. Developed in under two weeks, it's not production-ready but merely demonstrates architectural patterns.    
+```
 
 ### Dynamic Database Seeding
 
