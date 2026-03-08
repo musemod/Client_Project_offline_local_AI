@@ -34,6 +34,8 @@ TEXT2SQL_MODEL=arctic-text2sql:latest
 AI_RESPONSE_MODEL=qwen2.5-coder:7b
 JUDGE_MODEL=qwen2.5-coder:7b
 MODEL_URL=http://ollama:11434/v1/chat/completions
+OLLAMA_MODELS_PATH=/home/cynth/ollama_models_shared
+COMPOSE_PROJECT_NAME=offline-ai
 ENV_CONTENT
     echo -e "${GREEN}✓ Switched to Arctic model (judge: qwen2.5-coder:7b)${NC}"
     ;;
@@ -45,6 +47,8 @@ TEXT2SQL_MODEL=qwen2.5-coder:7b
 AI_RESPONSE_MODEL=qwen2.5-coder:7b
 JUDGE_MODEL=qwen2.5-coder:7b
 MODEL_URL=http://ollama:11434/v1/chat/completions
+OLLAMA_MODELS_PATH=/home/cynth/ollama_models_shared
+COMPOSE_PROJECT_NAME=offline-ai
 ENV_CONTENT
     echo -e "${GREEN}✓ Switched to qwen2.5-coder:7b model (all tasks)${NC}"
     ;;
@@ -56,6 +60,8 @@ TEXT2SQL_MODEL=distil-qwen3-4b:latest
 AI_RESPONSE_MODEL=qwen2.5-coder:7b
 JUDGE_MODEL=qwen2.5-coder:7b
 MODEL_URL=http://ollama:11434/v1/chat/completions
+OLLAMA_MODELS_PATH=/home/cynth/ollama_models_shared
+COMPOSE_PROJECT_NAME=offline-ai
 ENV_CONTENT
     echo -e "${GREEN}✓ Switched to distil-qwen3-4b:latest model (judge: qwen2.5-coder:7b)${NC}"
     ;;

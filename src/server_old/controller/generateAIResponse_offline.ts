@@ -30,7 +30,6 @@ export async function generateAIResponse({
     context = 'Database query results (raw data):\n' + JSON.stringify(data, null, 2);
   } else {
     // For search paths, we have formatted results with titles/descriptions
-    // We can do the same for other fields (not everything is added in here. Hard-coding acts more like placeholder for better code to dynamically retrieve fields)
     context = 'Search results from knowledge base:\n\n';
     data.forEach((item, index) => {
       if (item.title && item.description) {
@@ -46,37 +45,15 @@ export async function generateAIResponse({
     });
   }
 
-  // Updated examples based on actual data
-  const responsePrompt = `You are a helpful security compliance assistant for Vault Defense. Based on the information provided, answer the user's question in a clear, professional, and conversational manner.
+  const responsePrompt = `You are a helpful security compliance assistant. Based on the information provided, answer the user's question in a clear, professional, and conversational manner.
 
 INSTRUCTIONS:
 1. Synthesize information from the provided data to directly answer the question
-2. DO NOT repeat or paraphrase the user's question in your response
-3. DO NOT start with phrases like "Based on the data..." or "According to the results..."
-4. DO NOT use introductory phrases like "Here is what I found..." or "The answer to your question is..."
-5. Start your response DIRECTLY with the answer
-6. Be concise but complete - aim for 2 to 4 sentences
-7. Use natural language, not bullet points
-8. Focus on the most relevant information
-9. Don't mention that you're looking at database records or search results - just answer naturally
-10. When referring to the company, use "Vault Defense" as the company name
-
-EXAMPLES USING ACTUAL COMPANY DATA:
-
-Good response (for "who handles data security?"):
-"Frances Allen (frances.allen@email.com) is the Data Protection Lead, specializing in data security compliance and privacy."
-
-Good response (for "what cloud security controls exist?"):
-"Vault Defense implements multiple cloud security controls including data distribution across regions (US, EU, Asia Pacific), private VPC isolation for all compute resources, and comprehensive API security with OWASP Top 10 mitigations."
-
-Good response (for "has there been any security incidents?"):
-"Vault Defense maintains a perfect security track record with zero reportable incidents since inception. This is validated through quarterly penetration tests and annual SOC 2 Type II audits."
-
-Good response (for "who handles cloud security?"):
-"Grace Hopper (grace.hopper@email.com) serves as Cloud Security Architect, responsible for cloud security architecture and controls."
-
-Bad response (DO NOT DO THIS):
-"Based on your question about who handles cloud security, I looked at the data and found that Grace Hopper..."
+2. Be concise but complete - aim for 2 to 4 sentences
+3. Use natural language, not bullet points
+4. Focus on the most relevant information
+5. Don't mention that you're looking at database records or search results - just answer naturally
+6. If the information doesn't fully answer the question, acknowledge what you can confirm
 
 User Question: ${naturalLanguageQuery}
 
@@ -84,7 +61,7 @@ ${context}
 
 Provide a helpful, direct answer:`;
 
-  // Retry logic 
+  // RETRY LOGIC 
   const maxRetries = 3;
   let lastError: Error | null = null;
   let delay = 100; // Start with 100ms delay
@@ -99,8 +76,8 @@ Provide a helpful, direct answer:`;
         body: JSON.stringify({
           model: modelName,
           messages: [{ role: 'user', content: responsePrompt }],
-          temperature: 0.5, // Increased for more natural responses
-          max_tokens: 800,
+          temperature: 0.2,
+          max_tokens: 500,
           stop: []  
         })
       });
@@ -118,10 +95,12 @@ Provide a helpful, direct answer:`;
 
       let aiResponse = responseData.choices?.[0]?.message?.content?.trim();
 
+      // Check if we got a valid response
       if (!aiResponse) {
         throw new Error('Empty response from model');
       }
 
+      // Clean any special tokens
       aiResponse = aiResponse
         .replace(/<\|im_start\|>/g, '')
         .replace(/<\|im_end\|>/g, '')
@@ -129,6 +108,7 @@ Provide a helpful, direct answer:`;
         .replace(/\s+/g, ' ')
         .trim();
 
+      // Success - Return the response
       return {
         response: aiResponse,
         found: true,
@@ -144,16 +124,30 @@ Provide a helpful, direct answer:`;
       if (attempt < maxRetries) {
         console.log(`Retrying in ${delay}ms...`);
         await new Promise(resolve => setTimeout(resolve, delay));
-        delay *= 2;
+        delay *= 2; // Exponential backoff: 100ms, 200ms, 400ms
       }
     }
   }
 
+  // If we get here, all retries failed
   console.error('All retries failed. Last error:', lastError);
 
-  // Simpler fallback that doesn't expose raw data
+  // Generic fallback
+  const fallbackResponse = data
+    .map((item) => {
+      // For search results with title/description
+      if (item.title && item.description) {
+        return `${item.title}: ${item.description}`;
+      }
+      // For any other structure
+      return Object.entries(item)
+        .map(([key, value]) => `${key}: ${value}`)
+        .join(', ');
+    })
+    .join('\n\n');
+
   return {
-    response: 'I found some information but am having trouble formatting it. Please try rephrasing your question.',
+    response: fallbackResponse || 'No results found.',
     found: true,
     source,
     sqlQuery,

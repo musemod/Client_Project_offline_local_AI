@@ -16,13 +16,13 @@
                         "id": "UmVzcG9uc2libGVUZWFtOjEyMzQ1Njc4LWFiY2QtZWZnaC1pamtsLW1ub3AtcXJzdA==",
                         "firstName": "Frances",
                         "lastName": "Allen",
-                        "role": "Data Protection Lead",
+                        "role": "Technical Delivery Manager",
                         "email": "frances.allen@email.com",
                         "isActive": true,
                         "employeeId": 1001,
                         "responseTimeHours": 4.5,
                         "category": "Data Security",
-                        "searchText": "Frances Allen Data Protection Lead frances.allen@email.com Data Security",
+                        "searchText": "Frances Allen Technical Delivery Manager frances.allen@email.com Data Security Cloud Security Privacy",
                         "createdAt": "2025-12-16T23:31:08.332221+00:00",
                         "createdBy": "barbara.liskov@email.com",
                         "updatedAt": "2026-01-16T19:52:47.710913+00:00",
@@ -35,13 +35,13 @@
                         "id": "UmVzcG9uc2libGVUZWFtOjIyMzQ1Njc4LWJiY2QtZmZnaC1ramxrLW5ubm8tcHJwcg==",
                         "firstName": "Grace",
                         "lastName": "Hopper",
-                        "role": "Cloud Security Architect",
+                        "role": "Cloud Security Lead",
                         "email": "grace.hopper@email.com",
                         "isActive": true,
                         "employeeId": 1002,
                         "responseTimeHours": 2.0,
-                        "category": "Cloud Security",
-                        "searchText": "Grace Hopper Cloud Security Architect grace.hopper@email.com Cloud Security",
+                        "category": "Secure Development",
+                        "searchText": "Grace Hopper Cloud Security Lead grace.hopper@email.com Cloud Security Secure Development Security Monitoring",
                         "createdAt": "2025-12-16T23:31:08.465520+00:00",
                         "createdBy": "ada.lovelace@email.com",
                         "updatedAt": "2026-01-16T19:52:47.766265+00:00",
@@ -60,9 +60,9 @@
                         "employeeId": 1003,
                         "responseTimeHours": 6.0,
                         "category": "Organizational Security",
-                        "searchText": "Alan Turing Security Governance Director alan.turing@email.com Organizational Security",
+                        "searchText": "Alan Turing Security Governance Director alan.turing@email.com Organizational Security Data Security Security Monitoring",
                         "createdAt": "2025-12-16T23:31:08.453040+00:00",
-                        "createdBy": "barbara.liskov@email.com",
+                        "createdBy": "system@cyqu.com",
                         "updatedAt": "2026-01-16T19:52:47.760245+00:00",
                         "updatedBy": "grace.hopper@email.com"
                     }
@@ -73,15 +73,15 @@
                         "id": "UmVzcG9uc2libGVUZWFtOjQ0NDQ1Njc4LWRkZGQtaGhpaC1tbW1tLXBwcHAtdXV1dQ==",
                         "firstName": "Tim",
                         "lastName": "Berners-Lee",
-                        "role": "Secure Development Lead",
+                        "role": "Engineering Security Manager",
                         "email": "tim.berners-lee@email.com",
                         "isActive": false,
                         "employeeId": 1004,
                         "responseTimeHours": 8.5,
                         "category": "Secure Development",
-                        "searchText": "Tim Berners-Lee Secure Development Lead tim.berners-lee@email.com Secure Development",
+                        "searchText": "Tim Berners-Lee Engineering Security Manager tim.berners-lee@email.com Secure Development Cloud Security",
                         "createdAt": "2025-12-16T23:31:08.477068+00:00",
-                        "createdBy": "ada.lovelace@email.com",
+                        "createdBy": "system@cyqu.com",
                         "updatedAt": "2026-01-16T19:52:47.772752+00:00",
                         "updatedBy": "guido.vanrossum@email.com"
                     }
@@ -98,11 +98,11 @@
                         "employeeId": 1005,
                         "responseTimeHours": 3.0,
                         "category": "Data Security",
-                        "searchText": "Barbara Liskov Data Protection Officer barbara.liskov@email.com Data Security",
+                        "searchText": "Barbara Liskov Data Protection Officer barbara.liskov@email.com Data Security Privacy",
                         "createdAt": "2025-12-16T23:31:08.332221+00:00",
-                        "createdBy": "frances.allen@email.com",
+                        "createdBy": "system@cyqu.com",
                         "updatedAt": "2026-01-16T19:52:47.710913+00:00",
-                        "updatedBy": "alan.turing@email.com"
+                        "updatedBy": "frances.allen@email.com"
                     }
                 },
                 {
@@ -111,17 +111,17 @@
                         "id": "UmVzcG9uc2libGVUZWFtOjY2NjY1Njc4LWZmZmYtampqai1wb3BwLXh5eno=",
                         "firstName": "Ada",
                         "lastName": "Lovelace",
-                        "role": "Infrastructure Security Architect",
+                        "role": "Infrastructure Architect",
                         "email": "ada.lovelace@email.com",
                         "isActive": true,
                         "employeeId": 1006,
                         "responseTimeHours": 5.5,
                         "category": "Cloud Security",
-                        "searchText": "Ada Lovelace Infrastructure Security Architect ada.lovelace@email.com Cloud Security",
+                        "searchText": "Ada Lovelace Infrastructure Architect ada.lovelace@email.com Cloud Security Business Continuity Security Monitoring",
                         "createdAt": "2025-12-16T23:31:08.465520+00:00",
-                        "createdBy": "grace.hopper@email.com",
+                        "createdBy": "system@cyqu.com",
                         "updatedAt": "2026-01-16T19:52:47.766265+00:00",
-                        "updatedBy": "tim.berners-lee@email.com"
+                        "updatedBy": "grace.hopper@email.com"
                     }
                 },
                 {
@@ -135,10 +135,10 @@
                         "isActive": true,
                         "employeeId": 1007,
                         "responseTimeHours": 1.5,
-                        "category": "Security Monitoring",
-                        "searchText": "Margaret Hamilton Incident Response Lead margaret.hamilton@email.com Security Monitoring",
+                        "category": "Organizational Security",
+                        "searchText": "Margaret Hamilton Incident Response Lead margaret.hamilton@email.com Organizational Security Security Monitoring",
                         "createdAt": "2025-12-16T23:31:08.489535+00:00",
-                        "createdBy": "donald.knuth@email.com",
+                        "createdBy": "system@cyqu.com",
                         "updatedAt": "2026-01-16T19:52:47.779830+00:00",
                         "updatedBy": "dennis.ritchie@email.com"
                     }
@@ -149,17 +149,17 @@
                         "id": "UmVzcG9uc2libGVUZWFtOjg4ODg1Njc4LWhoaGgtbGxsbC1zdHN0LXd3d3c=",
                         "firstName": "Donald",
                         "lastName": "Knuth",
-                        "role": "Application Security Lead",
+                        "role": "Secure Development Lead",
                         "email": "donald.knuth@email.com",
                         "isActive": true,
                         "employeeId": 1008,
                         "responseTimeHours": 7.0,
                         "category": "Secure Development",
-                        "searchText": "Donald Knuth Application Security Lead donald.knuth@email.com Secure Development",
+                        "searchText": "Donald Knuth Secure Development Lead donald.knuth@email.com Secure Development",
                         "createdAt": "2025-12-16T23:31:08.525471+00:00",
                         "createdBy": "john.mccarthy@email.com",
                         "updatedAt": "2026-01-16T19:52:47.801381+00:00",
-                        "updatedBy": "margaret.hamilton@email.com"
+                        "updatedBy": "system@cyqu.com"
                     }
                 },
                 {
@@ -174,11 +174,11 @@
                         "employeeId": 1009,
                         "responseTimeHours": 4.0,
                         "category": "Privacy",
-                        "searchText": "Shafi Goldwasser Privacy & Compliance Specialist shafi.goldwasser@email.com Privacy",
+                        "searchText": "Shafi Goldwasser Privacy & Compliance Specialist shafi.goldwasser@email.com Privacy Organizational Security",
                         "createdAt": "2025-12-31T16:47:02.587878+00:00",
                         "createdBy": "jean.bartik@email.com",
                         "updatedAt": "2026-01-16T19:52:47.810628+00:00",
-                        "updatedBy": "martin.fowler@email.com"
+                        "updatedBy": "system@cyqu.com"
                     }
                 },
                 {
@@ -187,17 +187,17 @@
                         "id": "UmVzcG9uc2libGVUZWFtOjEwMTAxMDEwLW1ubm4tcnJyci16enp6LWJiYmI=",
                         "firstName": "Martin",
                         "lastName": "Fowler",
-                        "role": "Security Operations Center Manager",
+                        "role": "Security Operations Manager",
                         "email": "martin.fowler@email.com",
                         "isActive": true,
                         "employeeId": 1010,
                         "responseTimeHours": 2.5,
-                        "category": "Security Monitoring",
-                        "searchText": "Martin Fowler Security Operations Center Manager martin.fowler@email.com Security Monitoring",
+                        "category": "Organizational Security",
+                        "searchText": "Martin Fowler Security Operations Manager martin.fowler@email.com Security Monitoring Cloud Security Organizational Security",
                         "createdAt": "2025-12-31T16:47:02.655987+00:00",
                         "createdBy": "robert.martin@email.com",
                         "updatedAt": "2026-01-16T19:52:47.832747+00:00",
-                        "updatedBy": "shafi.goldwasser@email.com"
+                        "updatedBy": "system@cyqu.com"
                     }
                 }
             ]

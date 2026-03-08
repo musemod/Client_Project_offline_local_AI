@@ -3,12 +3,50 @@ import { dataService } from "../services/dataService";
 import { getCacheStats } from "../caching/cache";
 import { databaseQuery } from "../controller/databaseController";
 import { generateAIResponse } from "../controller/generateAIResponse_offline";
+import { QueryOpenAI } from "../controller/AI_Controller/onlineAIController";
 import { queryOfflineOpenAI } from "../controller/openaiController_local";
 import {
   runBackgroundJudgment,
   triggerBackgroundJudgment,
 } from "../controller/backgroundJobs";
+// Import your custom error class if you want to use it
+import { AppError } from "../errorHandler";
+
 export const router = new Elysia();
+
+// ===== GLOBAL ERROR HANDLER - ADD THIS RIGHT HERE =====
+router.onError(({ code, error, set }) => {
+  console.error('🔥 Global error handler caught:', { code, error });
+  
+  // Handle different error types
+  if (error instanceof AppError) {
+    set.status = error.status;
+    return { 
+      error: error.message, 
+      context: error.context,
+      timestamp: new Date().toISOString()
+    };
+  }
+  
+  // Handle validation errors
+  if (code === 'VALIDATION') {
+    set.status = 400;
+    return { 
+      error: 'Validation error', 
+      details: error.message,
+      timestamp: new Date().toISOString()
+    };
+  }
+  
+  // Default error response
+  set.status = 500;
+  return { 
+    error: 'Internal server error', 
+    message: error instanceof Error ? error.message : 'Unknown error',
+    timestamp: new Date().toISOString()
+  };
+});
+// ===== END OF GLOBAL ERROR HANDLER =====
 
 router.get("/", () => "Test");
 
@@ -40,6 +78,40 @@ router.get("/trustControls", async ({ error }) => {
   }
 });
 
+// router.post(
+//   "/ai-online",
+//   async ({ body }) => {
+//     try {
+//       // Step 1: Convert natural language to SQL
+//       const { naturalLanguageQuery } = body;
+//       const { cleanSQL } = await QueryOpenAI({
+//         naturalLanguageQuery,
+//         sqlQuery: "",
+//       });
+
+//       if (!cleanSQL) {
+//         return error(500, { err: "Failed to generate SQL query" });
+//       }
+
+//       // Step 2: Run the SQL against the database
+//       const { rows } = await databaseQuery(cleanSQL);
+
+//       // Step 3: Generate AI response from DB results
+//       return await generateAIResponse({
+//         naturalLanguageQuery,
+//         databaseQueryResult: rows,
+//         sqlQuery: cleanSQL,
+//       });
+//     } catch (err) {
+//       return error(500, { err: "Failed to process AI query" });
+//     }
+//   },
+//   {
+//     body: t.Object({
+//       naturalLanguageQuery: t.String(),
+//     }),
+//   },
+// );
 
 router.get("/allTeams", async ({ error }) => {
   try {
@@ -134,7 +206,7 @@ router.get("/admin/cache-stats", () => {
 // fastTextSearch or AI route
 router.post(
   "/ai/query",
-  async ({ body, error }) => {
+  async ({ body }) => {
     try {
       const { naturalLanguageQuery } = body;
 

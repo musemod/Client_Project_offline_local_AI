@@ -1,0 +1,14 @@
+{
+  "id": "bd189499-3416-415c-8e07-88fded763fb7",
+  "timestamp": "2026-03-08T01:31:48.870Z",
+  "naturalLanguageQuery": "which faqs were updated in January 2026?",
+  "generatedSQL": "SELECT \"question\", \"answer\" \nFROM \"allTrustFaqs\" \nWHERE strftime('%Y-%m', \"updatedAt\") = '2026-01';",
+  "resultsCount": 0,
+  "passed": false,
+  "score": 1,
+  "explanation": "Query returned no results - not enough data to tell if correct or not",
+  "source": "ai",
+  "executionTime": 3101,
+  "sqlModel": "arctic-text2sql:latest",
+  "judgeModel": "qwen2.5-coder:7b"
+}

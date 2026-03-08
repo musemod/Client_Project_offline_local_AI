@@ -23,7 +23,7 @@ try {
   console.warn('Failed to load test questions:', error);
 }
 
-// Replaces Express middleware triggerBackgroundJudgment
+// ── Replaces Express middleware triggerBackgroundJudgment ────────────────────
 
 export function triggerBackgroundJudgment(input: TriggerInput): JudgmentInput | null {
   const { naturalLanguageQuery, sqlQuery, results, source, executionTime } = input;
@@ -45,7 +45,8 @@ export function triggerBackgroundJudgment(input: TriggerInput): JudgmentInput | 
   return null;
 }
 
-// Count-based evaluation 
+// ── Count-based evaluation (unchanged) ──────────────────────────────────────
+
 function evaluateByCountOnly(
   resultsCount: number,
   expectedCount: number | string
@@ -75,7 +76,7 @@ function evaluateByCountOnly(
   };
 }
 
-// Main judgment execution
+// ── Main judgment execution (unchanged) ─────────────────────────────────────
 
 export async function runBackgroundJudgment(data: JudgmentInput): Promise<void> {
   if (!data) {

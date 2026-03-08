@@ -1,0 +1,16 @@
+{
+  "id": "3e91af5c-5fde-42c0-9877-d70bd2c1c379",
+  "timestamp": "2026-03-08T01:29:03.564Z",
+  "naturalLanguageQuery": "who are the security architects and what controls are in their categories",
+  "generatedSQL": "SELECT DISTINCT T1.\"firstName\", T1.\"lastName\", T2.\"category\" FROM \"allTeams\" AS T1 INNER JOIN \"allTrustControls\" AS T2 ON T1.\"category\" = T2.\"category\" WHERE T1.\"role\" ILIKE 'Security Architect' AND T1.\"isActive\" = true;",
+  "expectedSQL": "SELECT DISTINCT t.\"firstName\", t.\"lastName\", t.\"role\", t.\"category\", c.\"short\" FROM \"allTeams\" t LEFT JOIN \"allTrustControls\" c ON t.\"category\" ILIKE c.\"category\" WHERE t.\"role\" ILIKE '%architect%' AND t.\"isActive\" = true ORDER BY t.\"category\";",
+  "resultsCount": 0,
+  "expectedCount": ">=2",
+  "passed": false,
+  "score": 1,
+  "explanation": "No results, expected >=2",
+  "source": "ai",
+  "executionTime": 5562,
+  "sqlModel": "arctic-text2sql:latest",
+  "judgeModel": "qwen2.5-coder:7b"
+}

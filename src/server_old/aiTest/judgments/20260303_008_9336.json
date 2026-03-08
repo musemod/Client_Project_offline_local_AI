@@ -1,0 +1,14 @@
+{
+  "id": "a233e0fe-1397-4118-be8e-6881c0a69336",
+  "timestamp": "2026-03-03T12:15:57.510Z",
+  "naturalLanguageQuery": "which faqs are managed by team members who are technical managers",
+  "generatedSQL": "SELECT faq_id, title FROM faqs WHERE managed_by = 'technical manager';",
+  "resultsCount": 0,
+  "passed": false,
+  "score": 1,
+  "explanation": "Query returned no results - not enough data to tell if correct or not",
+  "source": "ai",
+  "executionTime": 1418,
+  "sqlModel": "distil-qwen3-4b:latest",
+  "judgeModel": "qwen2.5-coder:7b"
+}

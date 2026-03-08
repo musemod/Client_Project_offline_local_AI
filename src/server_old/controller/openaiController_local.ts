@@ -2,16 +2,12 @@ import { AIService } from '../services/aiService';
 import db from '../sql_db/db_connect_agnostic';
 import { dataService } from '../services/dataService';
 import { createError } from '../errorHandler';
+import { generateSchemaDescription } from '../sql_db/schemas-helper';
 import { type QueryResult, type OfflineAIOutput } from '../types';
 
 const aiService = new AIService();
 
-async function callAIService(prompt: string): Promise<string> {
-  return await aiService.textToSQL(prompt);
-}
-
-const AI_PATH_THRESHOLD = 4;
-const MIN_CACHEABLE_LENGTH = 100;
+// ── Constants ────────────────────────────────────────────────────────────────
 
 const STOP_WORDS = new Set([
   'what', 'who', 'where', 'when', 'why', 'how',
@@ -52,7 +48,8 @@ const PHRASE_PATTERNS = [
   /\beither .* or .*\b/i
 ];
 
-// Helper Functions
+// ── Helper Functions (unchanged) ─────────────────────────────────────────────
+
 function normalizeQuery(query: string): string {
   return query
     .toLowerCase()
@@ -103,7 +100,7 @@ function requiresAIPath(query: string): boolean {
 
   if (/\d+\s*(hours?|minutes?|days?)/.test(query)) score += 2;
 
-  const shouldUseAI = score >= AI_PATH_THRESHOLD;
+  const shouldUseAI = score >= 4;
 
   if (shouldUseAI) {
     console.log(`AI path (score: ${score})`, {
@@ -117,7 +114,6 @@ function requiresAIPath(query: string): boolean {
   return shouldUseAI;
 }
 
-// ensure search results match expected format
 async function fastTextSearch(query: string): Promise<{
   results: any[];
   source: 'search-cache' | 'search-db';
@@ -196,16 +192,20 @@ function createQueryResult(
   return result;
 }
 
+// ── Main Function ───────────────────────────────────────────────────────────
 
-// Main Function
 export async function queryOfflineOpenAI(
   naturalLanguageQuery: string
 ): Promise<OfflineAIOutput> {
 
-  if (!naturalLanguageQuery) {
-    throw new Error(createError('naturalLanguageQuery not found', 400, 'openaiController').log);
+ if (!naturalLanguageQuery) {
+  const errorObj = createError('naturalLanguageQuery not found', 400, 'openaiController');
+  if (errorObj && errorObj.log) {
+    throw new Error(errorObj.log);
+  } else {
+    throw new Error('naturalLanguageQuery not found');
   }
-
+}
   console.log('Processing query:', naturalLanguageQuery);
 
   // Step 1: Normalize + check cache
@@ -251,7 +251,7 @@ export async function queryOfflineOpenAI(
     const formattedResults = formatSearchResults(searchResults);
 
     // prevent caching of incomplete or echo responses
-    if (formattedResults.length > MIN_CACHEABLE_LENGTH &&
+    if (formattedResults.length > 100 &&
       !formattedResults.toLowerCase().includes('list all') &&
       !formattedResults.toLowerCase().includes(normalizedQuery)) {
 
@@ -285,7 +285,13 @@ export async function queryOfflineOpenAI(
   console.log('AI path: Generating schema from type definitions...');
   const aiStartTime = Date.now();
 
-  const sqlQuery = await callAIService(naturalLanguageQuery);
+  const schemaDescription = generateSchemaDescription();
+  const sqlQuery = await aiService.textToSQL({
+    prompt: naturalLanguageQuery,
+    schemaDescription,
+    categories: [],
+    instructions: '',
+  });
 
   const executionTime = `${Date.now() - aiStartTime}ms`;
   console.log('Generated SQL:', sqlQuery);

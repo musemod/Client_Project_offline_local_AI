@@ -1,0 +1,16 @@
+{
+  "id": "4d2fa988-030b-4c30-8fff-79b103057fee",
+  "timestamp": "2026-03-08T01:27:42.327Z",
+  "naturalLanguageQuery": "which team members have response times less than 3 hours",
+  "generatedSQL": "SELECT \"firstName\", \"lastName\", \"role\" \nFROM \"allTeams\" \nWHERE \"responseTimeHours\" < 3 AND \"isActive\" = true;",
+  "expectedSQL": "SELECT * FROM \"allTeams\" WHERE \"responseTimeHours\" < 3 AND \"isActive\" = true;",
+  "resultsCount": 3,
+  "expectedCount": ">=3",
+  "passed": true,
+  "score": 5,
+  "explanation": "Count OK: got 3, expected >=3",
+  "source": "ai",
+  "executionTime": 4951,
+  "sqlModel": "arctic-text2sql:latest",
+  "judgeModel": "qwen2.5-coder:7b"
+}

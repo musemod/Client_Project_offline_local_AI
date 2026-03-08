@@ -28,14 +28,6 @@ export interface CachedSearchResult {
   timestamp: string;
 }
 
-
-// export interface CachedResult {
-//   results: any[];
-//   formatted: string;
-//   sql: string | null;
-//   timestamp: string;
-// }
-
 export interface QueryResult {
   source: string;
   results: any[];
@@ -43,7 +35,6 @@ export interface QueryResult {
   sql: string | null;
   cached: boolean;
   cacheTime?: string;
-  error?: string;
 }
 
 

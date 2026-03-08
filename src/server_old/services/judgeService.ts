@@ -138,7 +138,7 @@ CRITICAL RULES:
             if (typeof parsed.score === 'number' && typeof parsed.explanation === 'string') {
                 // Clean up the explanation - remove extra whitespace and artifacts
                 const cleanExplanation = parsed.explanation
-                    .replace(/\|\|/g, '')                    // Remove || characters        
+                    .replace(/\|\|/g, '')                    // REMOVE || characters        
                     .replace(/\n\s*,?\s*\n/g, '\n')  // Remove lines with just commas
                     .replace(/\s+/g, ' ')            // Normalize whitespace
                     .trim();

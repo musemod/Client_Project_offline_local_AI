@@ -34,23 +34,17 @@ services:
 
   # --- AI Model Service (Ollama) --
   ollama:
-    image: ollama/ollama:0.16.3 # This official Docker ollama image includes all necessary CUDA libraries for GPU support.
+    image: ollama/ollama:latest # This official Docker ollama image includes all necessary CUDA libraries for GPU support.
     #  You can try lightweight but unofficial CPU-only version alpine/ollama ((https://hub.docker.com/r/alpine/ollama) which is only around 70 MB. 
-    container_name: ollama-shared # rename as needed
+    # image: ollama/ollama:0.15.5-rc2  # Pre-release beta ollama version, if you want to test model Qwen3-coder-next
+    container_name: ollama-4090 # rename as needed
     ports:
       - "11434:11434"
     volumes:
-      - ${OLLAMA_MODELS_PATH:-/home/cynth/ollama_models_shared}:/root/.ollama/models # Docker volume to bind mount pointing to shared models folder
+      - /home/cynth/ollama_models_shared:/root/.ollama  # Docker volume to bind mount pointing to shared models folder
       # - ollama_models:/root/.ollama # persists downloaded models
-    # runtime: nvidia # enables NVIDIA container runtime, allowing container to access GPU (legacy syntax - both this and more modern "deploy" syntax work)
+    runtime: nvidia # enables NVIDIA GPU (legacy syntax - both this and deploy.resources work)
     init: true # handles zombie processes, recommended for containers
-    deploy: # deploy (lines 46-52) is more modern syntax vs. runtime: nvidia (legacy) but does the same thing
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all # if you have multiple GPUs
-              capabilities: [gpu]
     environment:
       - OLLAMA_HOST=0.0.0.0 # listen on all interfaces
       - OLLAMA_PORT=11434
@@ -59,8 +53,8 @@ services:
       - OLLAMA_KEEP_ALIVE=-1 # keep models loaded forever (-1 = infinite)
       - OLLAMA_DEBUG=0
       - OLLAMA_CONTEXT_LENGTH=8192 # max context window size in tokens (affects VRAM)
-      - NVIDIA_VISIBLE_DEVICES=all # which GPUs to expose to container 
-      - NVIDIA_DRIVER_CAPABILITIES=compute,utility # required GPU capabilities (ensures neccesary CUDA drivers loaded inside container)
+      - NVIDIA_VISIBLE_DEVICES=all # which GPUs to expose to container
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility # required GPU capabilities
     restart: unless-stopped
     healthcheck:
       test: [ "CMD", "ollama", "list" ] # checks if Ollama is responding
@@ -90,13 +84,15 @@ services:
       - DB_USER=root
       - DB_PASSWORD=root
       - MODEL_URL=${MODEL_URL:-http://ollama:11434/v1/chat/completions} # Ollama OpenAI-compatible endpoint
-      - TEXT2SQL_MODEL=${TEXT2SQL_MODEL:-arctic-text2sql:latest} # alternative model option
-      # - TEXT2SQL_MODEL=${TEXT2SQL_MODEL:-distil-qwen3-4b:latest} # model for text-to-SQL tasks
+      # - TEXT2SQL_MODEL=${TEXT2SQL_MODEL:-arctic-text2sql} # alternative model option
+      - TEXT2SQL_MODEL=${TEXT2SQL_MODEL:-distil-qwen3-4b:latest} # model for text-to-SQL tasks
       - AI_RESPONSE_MODEL=${AIRESP_MODEL:-qwen2.5-coder:7b} # main AI response model 
       - JUDGE_MODEL=${JUDGE_MODEL:-qwen2.5-coder:7b} # model for evaluating/validating responses
       # - JUDGE_MODEL=${JUDGE_MODEL:-qwen2.5-coder:14b} # larger judge model option (needs more VRAM)
       - MODEL_REGISTRY_URL=http://ollama:11434/api/tags
       - HARDWARE_TIER=4090-workstation
+      - PG_URI=postgresql://postgres.kgdlviaqzszogrdtktma:cl13ntPr0j12345!@aws-0-us-west-2.pooler.supabase.com:6543/postgres
+      - AI_APIKEY=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
 
     command: ["bun", "run", "server"]
     develop:
@@ -132,7 +128,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_offline_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - app-network
 
@@ -149,7 +145,7 @@ services:
     depends_on:
       - db
     volumes:
-      - pgadmin_offline_data:/var/lib/pgadmin
+      - pgadmin_data:/var/lib/pgadmin
     networks:
       - app-network
 
@@ -160,5 +156,8 @@ networks:
 
 # --- Volumes ---
 volumes:
-  postgres_offline_data:
-  pgadmin_offline_data:
+  # ollama_models:
+  #   driver: local
+  #   name: ollama_models_4090
+  postgres_data:
+  pgadmin_data:

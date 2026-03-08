@@ -1,0 +1,16 @@
+{
+  "id": "9d22ff83-306c-4430-9e0a-55d28959a8db",
+  "timestamp": "2026-03-03T08:27:17.249Z",
+  "naturalLanguageQuery": "who are the technical delivery managers and what controls are they responsible for",
+  "generatedSQL": "SELECT * FROM technical_delivery_managers;",
+  "expectedSQL": "SELECT t.\"firstName\", t.\"lastName\", c.\"short\", c.\"long\" FROM \"allTeams\" t JOIN \"allTrustControls\" c ON t.\"category\" = c.\"category\" WHERE t.\"role\" ILIKE '%Technical Delivery Manager%' AND t.\"isActive\" = true;",
+  "resultsCount": 0,
+  "expectedCount": ">=3",
+  "passed": false,
+  "score": 1,
+  "explanation": "No results, expected >=3",
+  "source": "ai",
+  "executionTime": 1579,
+  "sqlModel": "distil-qwen3-4b:latest",
+  "judgeModel": "qwen2.5-coder:7b"
+}
