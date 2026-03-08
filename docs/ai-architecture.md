@@ -47,7 +47,7 @@ NOTE: This flow could be improved if cache were set AFTER human-friendly respons
 The JUDGE_MODEL operates asynchronously, not blocking user response:
 
 #### Evaluation Logic
-- **Test set matches**: If query matches `src/server/aiTest/test-questions.json`, compare resultsCount against expected count from ground truth
+- **Test set matches**: If query matches `src/server/aiTest/test-questions.json`, compare resultsCount against expected count from ground truth. NOTE: `src/server/aiTest/test_questions.md` is also available for quick copy/paste testing.
 - **No match**: LLM-as-Judge autonomously evaluates quality
 
 #### Output

@@ -1,0 +1,165 @@
+# Test Queries for Copy/Paste Testing
+
+Use these queries to test the text-to-SQL functionality. Each entry includes:
+- `naturalLanguageQuery` in JSON format (copy for API testing)
+- `SQL` query (copy for direct database testing)
+
+---
+
+```json
+ { "naturalLanguageQuery": "list all cloud security controls"}
+```
+
+```sql
+SELECT * FROM "allTrustControls" WHERE "category" ILIKE 'Cloud Security';
+```
+
+---
+
+```json
+ { "naturalLanguageQuery": "show me the short descriptions of data security controls"}
+```
+
+```sql
+SELECT "short" FROM "allTrustControls" WHERE "category" ILIKE 'Data Security';
+```
+
+---
+
+```json
+ { "naturalLanguageQuery": "find controls related to incident response in organizational security"}
+```
+
+```sql
+SELECT * FROM "allTrustControls" WHERE "category" ILIKE 'Organizational Security' AND ("short" ILIKE '%incident%' OR "long" ILIKE '%incident%');
+```
+
+---
+
+```json
+ { "naturalLanguageQuery": "how many controls are in each category"}
+```
+
+```sql
+SELECT "category", COUNT(*) as control_count FROM "allTrustControls" GROUP BY "category" ORDER BY "category";
+```
+
+---
+
+```json
+ { "naturalLanguageQuery": "which team members are responsible for cloud security"}
+```
+
+```sql
+SELECT * FROM "allTeams" WHERE "category" ILIKE 'Cloud Security' AND "isActive" = true;
+```
+
+---
+
+```json
+ { "naturalLanguageQuery": "show me controls and faqs about API security"}
+```
+
+```sql
+SELECT 'control' as type, "short", "long" FROM "allTrustControls" WHERE "searchText" ILIKE '%api%' UNION ALL SELECT 'faq' as type, "question", "answer" FROM "allTrustFaqs" WHERE "searchText" ILIKE '%api%';
+```
+
+---
+
+```json
+ { "naturalLanguageQuery": "who are the security architects and what controls are in their categories"}
+```
+
+```sql
+SELECT DISTINCT t."firstName", t."lastName", t."role", t."category", c."short" FROM "allTeams" t LEFT JOIN "allTrustControls" c ON t."category" ILIKE c."category" WHERE t."role" ILIKE '%architect%' AND t."isActive" = true ORDER BY t."category";
+```
+
+---
+
+```json
+ { "naturalLanguageQuery": "find all controls and faqs about privacy"}
+```
+
+```sql
+SELECT 'control' as type, "short" as title, "long" as content FROM "allTrustControls" WHERE "category" ILIKE 'Privacy' UNION ALL SELECT 'faq' as type, "question" as title, "answer" as content FROM "allTrustFaqs" WHERE "category" ILIKE 'Privacy';
+```
+
+---
+
+```json
+ { "naturalLanguageQuery": "what is the average response time for the data security team"}
+```
+
+```sql
+SELECT AVG("responseTimeHours") as average_response_time FROM "allTeams" WHERE "category" ILIKE 'Data Security' AND "isActive" = true;
+```
+
+---
+
+```json
+ { "naturalLanguageQuery": "list controls that mention both data and encryption"}
+```
+
+```sql
+SELECT * FROM "allTrustControls" WHERE ("short" ILIKE '%data%' OR "long" ILIKE '%data%') AND ("short" ILIKE '%encrypt%' OR "long" ILIKE '%encrypt%');
+```
+
+---
+
+```json
+ { "naturalLanguageQuery": "who are active team members in organizational security"}
+```
+
+```sql
+SELECT * FROM "allTeams" WHERE "category" ILIKE 'Organizational Security' AND "isActive" = true;
+```
+
+---
+
+```json
+ { "naturalLanguageQuery": "who are the security leads in the organization"}
+```
+
+```sql
+SELECT * FROM "allTeams" WHERE ("role" ILIKE '%lead%' OR "role" ILIKE '%manager%' OR "role" ILIKE '%director%' OR "role" ILIKE '%officer%') AND "isActive" = true;
+```
+
+---
+
+```json
+ { "naturalLanguageQuery": "show me all active team members related to data security or secure development"}
+```
+
+```sql
+SELECT * FROM "allTeams" WHERE ("category" ILIKE 'Data Security' OR "category" ILIKE 'Secure Development') AND "isActive" = true;
+```
+
+---
+
+```json
+ { "naturalLanguageQuery": "which team members have response times less than 3 hours"}
+```
+
+```sql
+SELECT * FROM "allTeams" WHERE "responseTimeHours" < 3 AND "isActive" = true;
+```
+
+---
+
+```json
+ { "naturalLanguageQuery": "find FAQs and trust controls that mention cookies or consent"}
+```
+
+```sql
+SELECT 'faq' as type, "question" as title, "answer" as content FROM "allTrustFaqs" WHERE "searchText" ILIKE '%cookies%' OR "searchText" ILIKE '%consent%' OR "searchText" ILIKE '%privacy%' UNION ALL SELECT 'control' as type, "short" as title, "long" as content FROM "allTrustControls" WHERE "searchText" ILIKE '%cookies%' OR "searchText" ILIKE '%consent%' OR "searchText" ILIKE '%privacy%';
+```
+
+---
+
+```json
+ { "naturalLanguageQuery": "show me secure development controls along with related FAQs"}
+```
+
+```sql
+SELECT c."short" as control_title, c."long" as control_description, f."question" as faq_title, f."answer" as faq_answer FROM "allTrustControls" c LEFT JOIN "allTrustFaqs" f ON c."category" ILIKE f."category" WHERE c."category" ILIKE 'Secure Development';
+```

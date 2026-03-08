@@ -33,7 +33,7 @@ The offline AI setup uses 2 models:
 
 ### Performance Optimization
 
-This setup includes a preloading script for seamless model switching. Both models warm up when the application starts. If they load during a user request, the delay could be 83% to 430% longer.
+This setup includes a preloading script for seamless model switching. Both models warm up when the application starts. If they load during a user request, the delay could be up to 11,873% longer (comparing 299 ms vs. 35.80 seconds).
 
 ## Why This Exists
 
@@ -51,7 +51,7 @@ This setup includes a preloading script for seamless model switching. Both model
 - **Cache-aside pattern**: Optimize for frequent queries
 - **Query routing**: Keyword text search vs AI path
 - **Text-to-SQL model**: Natural language to database queries
-- **Response generation model**: SQL results to human-readable textg
+- **Response generation model**: SQL results to human-readable text
 - **LLM-as-Judge**: Automated quality evaluation
 - **Non-blocking evaluation**: Async result scoring
 - **Dynamic database seeding**: Automated ETL pipeline
@@ -65,8 +65,7 @@ The flow implements a cache-aside pattern:
 2. **Keyword search**: Simple text matching (also cache-first)
 3. **AI path**: Complex query handling via model inference
 
-**Disclaimer**: This AI flow merely mimics a more robust pipeline. Developed in under two weeks, it's not production-ready but merely demonstrates architectural patterns.    
-
+**Disclaimer**: This AI flow merely mimics a more robust pipeline. Developed in under 2 weeks, it's not production-ready but merely demonstrates architectural patterns. Due to time constraints and the small dataset, I opted for a simple AI pipeline without implementing RAG, fine-tuning, or agentic AI, focusing more on local, private Docker / Ollama / models configuration.
 
 ### Dynamic Database Seeding
 
