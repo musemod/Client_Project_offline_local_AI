@@ -27,67 +27,39 @@ export async function generateAIResponse({
   let context = '';
 
   if (source === 'ai') {
-    context = 'Database query results (raw data):\n' + JSON.stringify(data, null, 2);
+    context = 'Database query results:\n' + JSON.stringify(data, null, 2);
   } else {
-    // For search paths, we have formatted results with titles/descriptions
-    // We can do the same for other fields (not everything is added in here. Hard-coding acts more like placeholder for better code to dynamically retrieve fields)
-    context = 'Search results from knowledge base:\n\n';
+    context = 'Search results:\n\n';
     data.forEach((item, index) => {
       if (item.title && item.description) {
-        context += `Result ${index + 1}:\n`;
-        context += `Title: ${item.title}\n`;
-        context += `Description: ${item.description}\n`;
-        if (item.category) context += `Category: ${item.category}\n`;
+        context += `${index + 1}. ${item.title} - ${item.description}`;
+        if (item.category) context += ` [${item.category}]`;
         context += '\n';
       } else {
-        // Fallback to JSON if structure is unknown
-        context += `Result ${index + 1}:\n${JSON.stringify(item, null, 2)}\n\n`;
+        context += `${index + 1}. ${JSON.stringify(item)}\n`;
       }
     });
   }
 
-  // Updated examples based on actual data
-  const responsePrompt = `You are a helpful security compliance assistant for Vault Defense. Based on the information provided, answer the user's question in a clear, professional, and conversational manner.
+  const responsePrompt = `You are a security compliance assistant for Vault Defense. Answer the user's question directly using only the provided data.
 
-INSTRUCTIONS:
-1. Synthesize information from the provided data to directly answer the question
-2. DO NOT repeat or paraphrase the user's question in your response
-3. DO NOT start with phrases like "Based on the data..." or "According to the results..."
-4. DO NOT use introductory phrases like "Here is what I found..." or "The answer to your question is..."
-5. Start your response DIRECTLY with the answer
-6. Be concise but complete - aim for 2 to 4 sentences
-7. Use natural language, not bullet points
-8. Focus on the most relevant information
-9. Don't mention that you're looking at database records or search results - just answer naturally
-10. When referring to the company, use "Vault Defense" as the company name
-
-EXAMPLES USING ACTUAL COMPANY DATA:
-
-Good response (for "who handles data security?"):
-"Frances Allen (frances.allen@email.com) is the Data Protection Lead, specializing in data security compliance and privacy."
-
-Good response (for "what cloud security controls exist?"):
-"Vault Defense implements multiple cloud security controls including data distribution across regions (US, EU, Asia Pacific), private VPC isolation for all compute resources, and comprehensive API security with OWASP Top 10 mitigations."
-
-Good response (for "has there been any security incidents?"):
-"Vault Defense maintains a perfect security track record with zero reportable incidents since inception. This is validated through quarterly penetration tests and annual SOC 2 Type II audits."
-
-Good response (for "who handles cloud security?"):
-"Grace Hopper (grace.hopper@email.com) serves as Cloud Security Architect, responsible for cloud security architecture and controls."
-
-Bad response (DO NOT DO THIS):
-"Based on your question about who handles cloud security, I looked at the data and found that Grace Hopper..."
+RULES:
+- Start your answer immediately - no introductions, no repeating user prompt
+- Use complete sentences, not bullet points
+- Include names and roles when relevant
+- Keep it concise (2-4 sentences)
+- Never mention "results" or "search"
 
 User Question: ${naturalLanguageQuery}
 
 ${context}
 
-Provide a helpful, direct answer:`;
+Answer:`;
 
   // Retry logic 
   const maxRetries = 3;
   let lastError: Error | null = null;
-  let delay = 100; // Start with 100ms delay
+  let delay = 100;
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
@@ -99,32 +71,25 @@ Provide a helpful, direct answer:`;
         body: JSON.stringify({
           model: modelName,
           messages: [{ role: 'user', content: responsePrompt }],
-          temperature: 0.5, // Increased for more natural responses
-          max_tokens: 800,
-          stop: []  
+          temperature: 0.3,
+          max_tokens: 400,
         })
       });
 
-      console.log('Ollama response status:', response.status);
-
       if (!response.ok) {
         const errorText = await response.text();
-        console.error(`Ollama error response (attempt ${attempt}):`, errorText);
         throw new Error(`Ollama API error: ${response.status} - ${errorText}`);
       }
 
       const responseData = await response.json();
-      console.log('Ollama response received');
-
       let aiResponse = responseData.choices?.[0]?.message?.content?.trim();
 
       if (!aiResponse) {
         throw new Error('Empty response from model');
       }
 
+      // Clean up any remaining artifacts
       aiResponse = aiResponse
-        .replace(/<\|im_start\|>/g, '')
-        .replace(/<\|im_end\|>/g, '')
         .replace(/<\|[^|]+\|>/g, '')
         .replace(/\s+/g, ' ')
         .trim();
@@ -142,16 +107,12 @@ Provide a helpful, direct answer:`;
       console.error(`Attempt ${attempt} failed:`, error);
 
       if (attempt < maxRetries) {
-        console.log(`Retrying in ${delay}ms...`);
         await new Promise(resolve => setTimeout(resolve, delay));
         delay *= 2;
       }
     }
   }
 
-  console.error('All retries failed. Last error:', lastError);
-
-  // Simpler fallback that doesn't expose raw data
   return {
     response: 'I found some information but am having trouble formatting it. Please try rephrasing your question.',
     found: true,

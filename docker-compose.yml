@@ -34,15 +34,14 @@ services:
 
   # --- AI Model Service (Ollama) --
   ollama:
-    image: ollama/ollama:0.16.3 # This official Docker ollama image includes all necessary CUDA libraries for GPU support.
+    image: ollama/ollama:0.16.3 # This official Docker ollama image includes all necessary CUDA libraries for GPU support. Pulling latest version can cause changes in how certain models are run.
     #  You can try lightweight but unofficial CPU-only version alpine/ollama ((https://hub.docker.com/r/alpine/ollama) which is only around 70 MB. 
     container_name: ollama-shared # rename as needed
     ports:
       - "11434:11434"
     volumes:
-      - ${OLLAMA_MODELS_PATH:-/home/cynth/ollama_models_shared}:/root/.ollama/models # Docker volume to bind mount pointing to shared models folder
-      # - ollama_models:/root/.ollama # persists downloaded models
-    # runtime: nvidia # enables NVIDIA container runtime, allowing container to access GPU (legacy syntax - both this and more modern "deploy" syntax work)
+      - ${OLLAMA_MODELS_PATH:-/home/cynth/ollama_models_shared}:/root/.ollama/models # Docker volume to bind mount pointing to a local shared models folder 
+    # - ollama_models:/root/.ollama # persists downloaded models
     init: true # handles zombie processes, recommended for containers
     deploy: # deploy (lines 46-52) is more modern syntax vs. runtime: nvidia (legacy) but does the same thing
       resources:

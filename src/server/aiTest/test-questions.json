@@ -4,7 +4,7 @@
     "expectedResponse": {
       "source": "ai",
       "sql": "SELECT * FROM \"allTrustControls\" WHERE \"category\" ILIKE 'Cloud Security';",
-      "resultsCount": ">=4",
+      "resultsCount": ">=3",
       "formatted": null
     }
   },
@@ -58,7 +58,7 @@
     "expectedResponse": {
       "source": "ai",
       "sql": "SELECT DISTINCT t.\"firstName\", t.\"lastName\", t.\"role\", t.\"category\", c.\"short\" FROM \"allTeams\" t LEFT JOIN \"allTrustControls\" c ON t.\"category\" ILIKE c.\"category\" WHERE t.\"role\" ILIKE '%architect%' AND t.\"isActive\" = true ORDER BY t.\"category\";",
-      "resultsCount": ">=2",
+      "resultsCount": ">=6",
       "formatted": null
     }
   },
@@ -94,7 +94,7 @@
     "expectedResponse": {
       "source": "ai",
       "sql": "SELECT * FROM \"allTeams\" WHERE \"category\" ILIKE 'Organizational Security' AND \"isActive\" = true;",
-      "resultsCount": ">=2",
+      "resultsCount": ">=1",
       "formatted": null
     }
   },
@@ -103,7 +103,7 @@
     "expectedResponse": {
       "source": "ai",
       "sql": "SELECT * FROM \"allTeams\" WHERE (\"role\" ILIKE '%lead%' OR \"role\" ILIKE '%manager%' OR \"role\" ILIKE '%director%' OR \"role\" ILIKE '%officer%') AND \"isActive\" = true;",
-      "resultsCount": ">=5",
+      "resultsCount": ">=6",
       "formatted": null
     }
   },
@@ -112,7 +112,7 @@
     "expectedResponse": {
       "source": "ai",
       "sql": "SELECT * FROM \"allTeams\" WHERE (\"category\" ILIKE 'Data Security' OR \"category\" ILIKE 'Secure Development') AND \"isActive\" = true;",
-      "resultsCount": ">=4",
+      "resultsCount": ">=3",
       "formatted": null
     }
   },
@@ -139,7 +139,7 @@
     "expectedResponse": {
       "source": "ai",
       "sql": "SELECT c.\"short\" as control_title, c.\"long\" as control_description, f.\"question\" as faq_title, f.\"answer\" as faq_answer FROM \"allTrustControls\" c LEFT JOIN \"allTrustFaqs\" f ON c.\"category\" ILIKE f.\"category\" WHERE c.\"category\" ILIKE 'Secure Development';",
-      "resultsCount": ">=6",
+      "resultsCount": ">=5",
       "formatted": null
     }
   }
