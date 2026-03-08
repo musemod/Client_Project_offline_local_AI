@@ -42,7 +42,6 @@ This setup includes a preloading script for seamless model switching. Both model
 - **GPU acceleration**: Optional GPU support (see docker-compose.yml)
 - **Model preloading**: Optional script to pre-load both models
 - **Hot-swappable models**: Switch models at runtime without restart
-- **Infrastructure demonstration**: Complex orchestration patterns
 
 ## Architecture Summary
 
