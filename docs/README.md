@@ -57,14 +57,45 @@ This setup includes a preloading script for seamless model switching. Both model
 
 ### AI Implementation
 
-Refer to AI flow chart in [AI Architecture Deep Dive](ai-architecture.md) for a visual representation of the request flow from user prompt to response generation, including the non-blocking evaluation step that scores and logs SQL query quality.
+The offline AI system uses a **compound-AI architecture** with specialized models working together:
+- **Text-to-SQL model** (7B): Translates natural language to PostgreSQL queries
+- **Response model** (7B): Formats raw results into conversational answers
+- **Judge model**: Asynchronously evaluates SQL quality without blocking users
 
-The flow implements a cache-aside pattern:
-1. **Cache check**: Prioritize cached responses
-2. **Keyword search**: Simple text matching (also cache-first)
-3. **AI path**: Complex query handling via model inference
+**Request Flow**:
+1. **Cache check**: Exact-match caching (5-minute TTL)
+2. **Complexity routing**: Simple queries use keyword search; complex queries trigger SQL generation
+3. **Response generation**: Results formatted into natural language
+4. **Non-blocking evaluation**: SQL quality scored and logged asynchronously
 
-**Disclaimer**: This AI flow merely mimics a more robust pipeline. Developed in under 2 weeks, it's not production-ready but merely demonstrates architectural patterns. Due to time constraints and the small dataset, I opted for a simple AI pipeline without implementing RAG, fine-tuning, or agentic AI, focusing more on local, private Docker / Ollama / models configuration.
+> See [AI Architecture Deep Dive](ai-architecture.md) for flow diagrams and component details.
+
+#### Prototype Status & Production Considerations
+
+This system was built in under two weeks to **demonstrate architectural patterns**, not to be production-ready. Below is an honest assessment of where it stands and what a production version would require:
+
+| Layer | Current Implementation | What Production Would Add |
+|-------|------------------------|---------------------------|
+| **Models** | Model 1 handles SQL generation, Model 2 handles response formatting & evaluation | Specialized fine-tuned models for each task with higher accuracy |
+| **Security** | Basic SQL execution with SELECT-only enforcement | AI gateway with prompt injection detection, SQL injection prevention |
+| **Validation** | LLM-as-Judge (asynchronous) with result count verification | Human-in-the-loop validation + semantic correctness metrics |
+| **Caching** | Dual-layer: exact query match + keyword-based result caching (5-min TTL) | Semantic caching (cache by meaning) + partial result caching |
+| **Data Privacy** | Full result visibility with SELECT-only restriction | PII redaction, row-level security, output guardrails |
+| **Post-processing** | Regex-based SQL cleaning to handle model hallucinations | Fine-tuning reduces need for post-processing |
+
+**What Works Now**:
+- Complete end-to-end pipeline from query to response
+- Model specialization (separate models for SQL, dual-purpose model for response & evaluation)
+- Non-blocking evaluation preserves user experience
+- Local-first ensures data privacy and no API costs
+
+**What I'd Explore Next**:
+- **Human-in-the-loop validation**: Flag low-confidence SQL for human review; use corrections to improve the system
+- **Fine-tuning on real queries**: Replace generic models with versions trained on actual usage patterns
+- **Semantic caching**: Cache based on query meaning rather than exact text to improve hit rates
+- **PII awareness**: Add basic detection/redaction of sensitive information
+
+> **Note**: I'm actively learning about AI patterns.
 
 ### Dynamic Database Seeding
 

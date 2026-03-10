@@ -8,97 +8,155 @@ The AI implementation is accessible at: [http://localhost:3000/api/ai/query](htt
 
  ![AI flow chart](assets/01_ai-flow-chart-h.png)
 
-### 1. Query Reception
+### Core Request Pipeline
+
+| Step | Component | Description |
+|------|-----------|-------------|
+| **1. Query Reception** | Frontend → API | User submits natural language question |
+| **2. Cache Check** | Exact-match cache | Returns cached response if exact normalized query seen within 5 min |
+| **3. Complexity Scoring** | `requiresAIPath()` function | Scores query (0-10+) based on aggregations, entity mentions, phrase patterns; threshold ≥4 triggers AI path |
+| **4a. Simple Path** | Keyword Search | Extracts keywords, checks keyword cache, then searches `searchText` using PostgreSQL full-text |
+| **4b. Complex Path** | Text-to-SQL Model | Generates SQL → post-processing fixes → executes against database |
+| **5. Response Generation** | Response Model | Formats results into conversational answer |
+| **6. Evaluation** | Judge Model | Asynchronously scores SQL quality and logs results |
+
+### Detailed Flow Description
+
+#### 1. Query Reception
 When a user interacts with the AI chatbot by sending a query, the application executes the following decision tree.
 
-### 2. Cache Check
+#### 2. Cache Check
 The application first checks if the exact query was sent within the past 5 minutes:
 - **Cache HIT**: Returns cached results immediately
 - **Cache MISS**: Proceeds to complexity analysis
 
-### 3. Query Classification
+#### 3. Query Classification
 The application determines whether the user prompt requires AI assistance:
 
-#### A. Keyword Search Path (Low Complexity)
+**A. Keyword Search Path (Low Complexity)**
 If the query is not complex enough to need the TEXT2SQL_MODEL:
 1. Check for cached table data
 2. If cache MISS, query searchText fields (pre-optimized for rapid lookup)
 3. Store both query (as key) and results in cache
 4. Proceed to response generation
 
-#### B. AI Path (High Complexity)
+**B. AI Path (High Complexity)**
 If the TEXT2SQL_MODEL is required:
 1. Send user query to TEXT2SQL_MODEL
 2. Convert natural language to SQL
 3. Execute generated SQL against PostgreSQL
 4. Proceed to response generation
 
-### 4. Response Generation
+#### 4. Response Generation
 All results paths converge at the AI_RESPONSE_MODEL:
-- **Keyword search results**
-- **AI-generated query results**
--**Cached query results**
+- Keyword search results
+- AI-generated query results
+- Cached query results
 
 The response model converts raw data into human-friendly format before returning to the frontend chatbot.
 
-NOTE: This flow could be improved if cache were set AFTER human-friendly responses were generated and validated, so valid responses could immediately be returned to the user and responses would not need to be generated every time. However, a more robust validation step would be necessary to prevent invalid responses from being cached.
+> **Note**: This flow could be improved if cache were set AFTER human-friendly responses were generated and validated, so valid responses could immediately be returned to the user and responses would not need to be generated every time. However, a more robust validation step would be necessary to prevent invalid responses from being cached.
 
-### 5. Non-Blocking Evaluation
+#### 5. Non-Blocking Evaluation
 The JUDGE_MODEL operates asynchronously, not blocking user response:
 
-#### Evaluation Logic
-- **Test set matches**: If query matches `src/server/aiTest/test-questions.json`, compare resultsCount against expected count from ground truth. NOTE: `src/server/aiTest/test_questions.md` is also available for quick copy/paste testing.
+**Evaluation Logic**:
+- **Test set matches**: If query matches `src/server/aiTest/test-questions.json`, compare resultsCount against expected count from ground truth. (See also: `src/server/aiTest/test_questions.md` for quick copy/paste testing)
 - **No match**: LLM-as-Judge autonomously evaluates quality
 
-#### Output
-Scores and explanations are saved to: 
-src/server/aiTest/judgements/
+**Output**: Scores and explanations are saved to: `src/server/aiTest/judgements/`
+
+### Component Details
+
+#### Text-to-SQL Model (7B)
+
+| Aspect | Current Implementation | Production Target |
+|--------|------------------------|-------------------|
+| **Purpose** | Convert natural language to PostgreSQL queries | Same |
+| **Model** | Generic 7B with prompt engineering | Fine-tuned on company-specific query patterns |
+| **Post-processing** | Extensive regex fixes: SQL extraction, quote fixing, UNION correction, identifier validation | Fine-tuning would eliminate most post-processing |
+| **Limitations** | May hallucinate tables/columns; requires aggressive cleaning; not all models follow instructions | Specialized model would generate cleaner SQL |
+
+#### Response Model (7B)
+
+| Aspect | Current Implementation | Production Target |
+|--------|------------------------|-------------------|
+| **Purpose** | Transform raw data into natural language answers | Same |
+| **Model** | Generic 7B with instruction prompts | Fine-tuned on company tone and terminology |
+| **Note** | Same model also serves as Judge (dual-purpose) | Would use specialized models in production |
+
+#### Judge Model (7B)
+
+| Aspect | Current Implementation | Production Target |
+|--------|------------------------|-------------------|
+| **Purpose** | Asynchronous quality evaluation | Same + human validation |
+| **Logic** | Test set match → compare counts; No match → LLM-as-Judge | Add semantic correctness checks, human sampling |
+| **Limitations** | Count comparison doesn't verify data correctness; LLM-judge accuracy bounded by model capabilities | Human validation would catch subtle errors |
 
 
-## Important Notes
+### Design Decisions & Trade-offs
 
-> **Disclaimer**: This flow prototypes a production pipeline but was developed in under two weeks. It demonstrates architectural patterns rather than production-ready robustness. Each step mimics real-world behavior but lacks the comprehensive error handling, validation, and optimization required for production deployment.
+| Decision | Why | Trade-off |
+|----------|-----|-----------|
+| **Model specialization** | Each task (SQL, response, evaluation) has different requirements | More complex orchestration |
+| **Non-blocking evaluation** | Users get immediate responses | Quality feedback is delayed |
+| **Local-only models** | Data privacy, no API costs | Limited to 7B parameter models |
+| **5-minute TTL cache** | Simple implementation | Misses semantic similarities |
+| **Dual-purpose response/judge model** | Reduces resource requirements | May compromise performance of both tasks |
 
- ### AI Text-to-SQL 
- * **Purpose**:
- * - Provide quick feedback during prompt engineering using lightweight, open source models
- * - Test workflow integration before implementing proper SQL generation
- * - Mock the behavior of a text-to-SQL system
- 
- * **Limitations**:
- * - Prompt tailored to specific mock data and weaker AI model
- * - Applies post-processing fixes that mask model errors
- * - Uses ILIKE for simplicity (not performance-optimized)
 
-### AI Evaluation
-  * **Purpose**:
- * - Enable rapid evaluation of text-to-SQL outputs during development and prompt engineering
- * - Provide immediate feedback on SQL generation quality using lightweight open-source judge models
- * - Support hybrid validation strategy:
- *   a. Match results count comparison when test set contains ground truth
- *   b. LLM-as-judge evaluation for ad-hoc queries without predefined expectations
- * - Mock the behavior of a production evaluation system for testing workflows
- * -Saves logs under aiTest/judgements folder 
- * 
- * **Limitations**:
- * - Result count comparison only validates row volume, not data correctness or quality
- *   (e.g., correct count but wrong records would pass validation)
- * - LLM-as-judge accuracy is bounded by the judge model's capabilities:
- *   * Smaller models may miss subtle semantic differences
- *   * No guaranteed consistency in evaluation criteria
- *   * Potential bias based on model training data
- * - Lacks calibration against human expert judgments
+### Caching Strategy
 
- ### Caching 
- * **Purpose**:
- * - Provide quick in-memory caching (not heavy Redis implementation)
- * - Test workflow integration before implementing proper caching strategies
- * - Mock the behavior of a caching system
- * 
- * **Limitations**:
- * - Works only with small datasets
- * - Needs more thoughtful implementation (i.e. after AI response generation but only if that response were validated)
- 
+| Aspect | Current Implementation | Production Enhancement |
+|--------|------------------------|------------------------|
+| **Type** | In-memory, exact-match | Semantic + partial caching |
+| **TTL** | 5 minutes | Variable based on data freshness needs |
+| **Scope** | Full query results | Partial results, embeddings |
+| **Limitations** | Works only with small datasets; caches before validation | Would cache after validation to ensure quality |
+
+### Human-in-the-Loop Considerations
+
+For production deployment, this system would benefit from human-in-the-loop validation:
+
+**Why HITL matters for Text2SQL**:
+- **Accuracy verification**: SQL correctness cannot be fully automated
+- **Edge case handling**: Novel queries need human review
+- **Continuous improvement**: Human corrections become training data
+- **Trust building**: Users need confidence in AI-generated queries
+
+**Minimal HITL implementation**:
+1. **Confidence scoring** flag low-quality SQL for review
+2. **Review queue** for human verification of uncertain queries
+3. **Feedback collection** from end users on response quality
+4. **Test set augmentation** from corrected queries
+
+**Best practices for non-agentic systems**:
+- **Training phase**: Human-labeled data
+- **Inference phase**: HITL for low-confidence predictions
+- **Feedback phase**: User signals for implicit validation
+- **Audit phase**: Periodic sampling of all outputs
+
+### Production Roadmap
+
+If this were moving to production, I'd prioritize:
+
+| Phase | Focus | Key Improvements |
+|-------|-------|------------------|
+|  **Phase 1**   | Accuracy | Fine-tune models on actual query logs; add confidence scoring; implement basic human review for low-confidence queries |
+|  **Phase 2**   | Reliability | Add self-correction loop (execute SQL, catch errors, regenerate); implement semantic caching; add monitoring and alerting |
+|  **Phase 3**  | Security & Privacy | Add PII detection/redaction for sensitive fields (emails, employee IDs); implement basic guardrails on output content; rate limiting and cost tracking |
+|  **Phase 4**  | Continuous Improvement | Use human corrections to augment training data; A/B test model improvements; build observability dashboard |
+
+### What I'm Still Learning
+
+This project has been a hands-on exploration of AI system design. Areas I'm actively building understanding in:
+
+- **Semantic caching**: Moving from exact-match to meaning-based caching
+- **PII handling**: Identifying and protecting sensitive data in transit (names, emails, employee IDs)
+- **Guardrails**: Preventing prompt injection and inappropriate outputs
+- **Human-in-the-loop**: Designing efficient review workflows
+- **Evaluation metrics**: Moving beyond result counts to semantic correctness
+
 ## Related Documentation
 - [Main README](README.md) - Project overview
 - [Setup Guide](setup.md) - Comprehensive setup guide
