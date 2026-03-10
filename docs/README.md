@@ -91,12 +91,18 @@ This system was built in under two weeks to **demonstrate architectural patterns
 - Local-first ensures data privacy and no API costs
 
 **What I'd Explore Next**:
-- **Human-in-the-loop validation**: Flag low-confidence SQL for human review; use corrections to improve the system
-- **Fine-tuning on real queries**: Replace generic models with versions trained on actual usage patterns
-- **Semantic caching**: Cache based on query meaning rather than exact text to improve hit rates
-- **PII awareness**: Add basic detection/redaction of sensitive information
+### What I'd Explore Next
 
-> **Note**: I'm actively learning about AI patterns.
+| Priority | Direction | Why It Matters |
+|----------|-----------|----------------|
+| **Immediate** | Fine-tuning on real queries | Replace generic models with versions trained on actual usage patterns for higher accuracy |
+| **Immediate** | Human-in-the-loop validation | Flag low-confidence SQL for human review; use corrections to continuously improve |
+| **Near-term** | Semantic caching | Cache based on query meaning rather than exact text to improve hit rates at scale |
+| **Near-term** | Agentic AI patterns | Evolve from single-turn SQL generation to agents that self-correct, ask questions, and handle multi-step queries |
+| **Ongoing** | PII awareness & guardrails | Add detection/redaction of sensitive information; prevent prompt injection |
+| **Ongoing** | Scalability | Distributed caching, horizontal scaling |
+
+> **Note**: I'm currently learning about AI patterns.
 
 ### Dynamic Database Seeding
 
