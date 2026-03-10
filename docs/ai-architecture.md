@@ -149,6 +149,8 @@ This project sparked curiosity about what comes next. I'm actively exploring:
 | Topic | Why It Matters |
 |-------|----------------|
 | **Semantic caching** | Moving beyond exact-match to cache by meaning - critical for production scale |
+| **Agentic AI patterns** | Moving from single-turn SQL generation to agents that self-correct, ask questions, and choose tools |
+| **Agent observability** | Understanding why an agent failed or what decision it made |
 | **PII handling** | Protecting user data isn't optional - learning detection/redaction patterns |
 | **Guardrails** | Preventing prompt injection and inappropriate outputs before they reach users |
 | **Human-in-the-loop** | Designing efficient review workflows for edge cases |
