@@ -90,7 +90,6 @@ This system was built in under two weeks to **demonstrate architectural patterns
 - Non-blocking evaluation preserves user experience
 - Local-first ensures data privacy and no API costs
 
-**What I'd Explore Next**:
 ### What I'd Explore Next
 
 | Priority | Direction | Why It Matters |
