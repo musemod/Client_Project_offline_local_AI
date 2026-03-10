@@ -16,7 +16,7 @@ This prototype was built as part of a client-student partnership through Codesmi
 
 ## Overview
 
-This is my fork of OSP1-ClientProject. The original project can be found at: [https://github.com/kevinortiz43/OSP1-ClientProject](https://github.com/kevinortiz43/OSP1-ClientProject)
+This is my fork of OSP1-ClientProject. The original project can be found at: [https://github.com/kevinortiz43/Customer-support-AI-powered-product](https://github.com/kevinortiz43/Customer-support-AI-powered-product)
 
 I architected the offline/local AI branch feature (backend), drove the project's cache-aside strategy, and orchestrated its OS-agnostic ETL pipeline for dynamically seeding the PostgreSQL database.
 
