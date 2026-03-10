@@ -82,6 +82,7 @@ This system was built in under two weeks to **demonstrate architectural patterns
 | **Caching** | Dual-layer: exact query match + keyword-based result caching (5-min TTL) | Semantic caching (cache by meaning) + partial result caching |
 | **Data Privacy** | Full result visibility with SELECT-only restriction | PII redaction, row-level security, output guardrails |
 | **Post-processing** | Regex-based SQL cleaning to handle model hallucinations | Fine-tuning reduces need for post-processing |
+| **Scalability** | In-memory cache, single-node, rule-based routing | Distributed cache (Redis), horizontal scaling
 
 **What Works Now**:
 - Complete end-to-end pipeline from query to response
