@@ -57,7 +57,7 @@ This setup includes a preloading script for seamless model switching. Both model
 
 ### AI Implementation
 
-The offline AI system uses a **compound-AI architecture** with specialized models working together:
+The offline AI system uses a **compound-AI architecture**:
 - **Text-to-SQL model** (7B): Translates natural language to PostgreSQL queries
 - **Response model** (7B): Formats raw results into conversational answers
 - **Judge model**: Asynchronously evaluates SQL quality without blocking users

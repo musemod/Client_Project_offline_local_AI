@@ -14,7 +14,7 @@ The AI implementation is accessible at: [http://localhost:3000/api/ai/query](htt
 |------|-----------|-------------|
 | **1. Query Reception** | Frontend → API | User submits natural language question |
 | **2. Cache Check** | Exact-match cache | Returns cached response if exact normalized query seen within 5 min |
-| **3. Complexity Scoring** | `requiresAIPath()` function | Scores query (0-10+) based on aggregations, entity mentions, phrase patterns; threshold ≥4 triggers AI path |
+| **3. Complexity Scoring** | `requiresAIPath()` function | Scores query based on aggregations, entity mentions, phrase patterns; threshold ≥4 triggers AI path |
 | **4a. Simple Path** | Keyword Search | Extracts keywords, checks keyword cache, then searches `searchText` using PostgreSQL full-text |
 | **4b. Complex Path** | Text-to-SQL Model | Generates SQL → post-processing fixes → executes against database |
 | **5. Response Generation** | Response Model | Formats results into conversational answer |
@@ -103,6 +103,8 @@ The JUDGE_MODEL operates asynchronously, not blocking user response:
 | **Local-only models** | Data privacy, no API costs | Limited to 7B parameter models |
 | **5-minute TTL cache** | Simple implementation | Misses semantic similarities |
 | **Dual-purpose response/judge model** | Reduces resource requirements | May compromise performance of both tasks |
+| **In-memory caching** | Fast, simple for prototype | **Does not scale** beyond small datasets (RAM limits, no distribution) |
+| **Rule-based complexity scoring** | Zero-cost, transparent routing | **Brittle at scale** - misses novel query patterns; would need ML-based classifier for production |
 
 
 ### Caching Strategy
@@ -112,29 +114,21 @@ The JUDGE_MODEL operates asynchronously, not blocking user response:
 | **Type** | In-memory, exact-match | Semantic + partial caching |
 | **TTL** | 5 minutes | Variable based on data freshness needs |
 | **Scope** | Full query results | Partial results, embeddings |
-| **Limitations** | Works only with small datasets; caches before validation | Would cache after validation to ensure quality |
+| **Scale Limitation** | Works only with small datasets | Would need Redis/Memcached, sharding, and eviction policies |
 
 ### Human-in-the-Loop Considerations
 
 For production deployment, this system would benefit from human-in-the-loop validation:
 
-**Why HITL matters for Text2SQL**:
-- **Accuracy verification**: SQL correctness cannot be fully automated
-- **Edge case handling**: Novel queries need human review
-- **Continuous improvement**: Human corrections become training data
-- **Trust building**: Users need confidence in AI-generated queries
-
 **Minimal HITL implementation**:
-1. **Confidence scoring** flag low-quality SQL for review
-2. **Review queue** for human verification of uncertain queries
-3. **Feedback collection** from end users on response quality
-4. **Test set augmentation** from corrected queries
+1. **Confidence scoring**: Flag low-quality SQL for human review
+2. **Review queue**: Simple interface for verifying uncertain queries
+3. **Feedback loop**: Use corrections to augment training data
 
-**Best practices for non-agentic systems**:
-- **Training phase**: Human-labeled data
-- **Inference phase**: HITL for low-confidence predictions
-- **Feedback phase**: User signals for implicit validation
-- **Audit phase**: Periodic sampling of all outputs
+**Where HITL adds value**:
+- **Edge cases**: Novel query patterns the model hasn't seen
+- **Business rules**: Nuanced logic an LLM might miss
+- **Trust building**: Users gain confidence when they see human oversight
 
 ### Production Roadmap
 
@@ -142,20 +136,24 @@ If this were moving to production, I'd prioritize:
 
 | Phase | Focus | Key Improvements |
 |-------|-------|------------------|
-|  **Phase 1**   | Accuracy | Fine-tune models on actual query logs; add confidence scoring; implement basic human review for low-confidence queries |
-|  **Phase 2**   | Reliability | Add self-correction loop (execute SQL, catch errors, regenerate); implement semantic caching; add monitoring and alerting |
-|  **Phase 3**  | Security & Privacy | Add PII detection/redaction for sensitive fields (emails, employee IDs); implement basic guardrails on output content; rate limiting and cost tracking |
-|  **Phase 4**  | Continuous Improvement | Use human corrections to augment training data; A/B test model improvements; build observability dashboard |
+| **Phase 1** | Accuracy | Fine-tune models on actual query logs; add confidence scoring; basic human review for edge cases |
+| **Phase 2** | Scale | Replace in-memory cache with Redis; add semantic caching; implement query logging for analysis |
+| **Phase 3** | Reliability | Add self-correction loop (execute SQL, catch errors, regenerate); monitoring and alerting |
+| **Phase 4** | Security & Privacy | Add PII detection/redaction; output guardrails; rate limiting |
+| **Phase 5** | Continuous Improvement | Use human corrections to augment training data; A/B test model improvements |
 
 ### What I'm Still Learning
 
-This project has been a hands-on exploration of AI system design. Areas I'm actively building understanding in:
+This project sparked curiosity about what comes next. I'm actively exploring:
 
-- **Semantic caching**: Moving from exact-match to meaning-based caching
-- **PII handling**: Identifying and protecting sensitive data in transit (names, emails, employee IDs)
-- **Guardrails**: Preventing prompt injection and inappropriate outputs
-- **Human-in-the-loop**: Designing efficient review workflows
-- **Evaluation metrics**: Moving beyond result counts to semantic correctness
+| Topic | Why It Matters |
+|-------|----------------|
+| **Semantic caching** | Moving beyond exact-match to cache by meaning - critical for production scale |
+| **PII handling** | Protecting user data isn't optional - learning detection/redaction patterns |
+| **Guardrails** | Preventing prompt injection and inappropriate outputs before they reach users |
+| **Human-in-the-loop** | Designing efficient review workflows for edge cases |
+| **Evaluation metrics** | Result counts aren't enough - need semantic correctness |
+| **Scaling AI systems** | Understanding where this prototype would break |
 
 ## Related Documentation
 - [Main README](README.md) - Project overview
