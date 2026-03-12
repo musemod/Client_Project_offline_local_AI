@@ -77,6 +77,7 @@ This system was built in under two weeks to **demonstrate architectural patterns
 | Layer | Current Implementation | What Production Would Add |
 |-------|------------------------|---------------------------|
 | **Models** | Model 1 handles SQL generation, Model 2 handles response formatting & evaluation | Specialized fine-tuned models for each task with higher accuracy |
+| **Context Strategy** | In-context learning (schema + examples in prompt) | RAG for dynamic/large schemas |
 | **Security** | Basic SQL execution with SELECT-only enforcement | AI gateway with prompt injection detection, SQL injection prevention |
 | **Validation** | LLM-as-Judge (asynchronous) with result count verification | Human-in-the-loop validation + semantic correctness metrics |
 | **Caching** | Dual-layer: exact query match + keyword-based result caching (5-min TTL) | Semantic caching (cache by meaning) + partial result caching |
@@ -98,10 +99,11 @@ This system was built in under two weeks to **demonstrate architectural patterns
 | **Immediate** | Human-in-the-loop validation | Flag low-confidence SQL for human review; use corrections to continuously improve |
 | **Near-term** | Semantic caching | Cache based on query meaning rather than exact text to improve hit rates at scale |
 | **Near-term** | Agentic AI patterns | Evolve from single-turn SQL generation to agents that self-correct, ask questions, and handle multi-step queries |
+| **Near-term** | RAG for dynamic schemas | Current in-context learning for fixed schema; RAG would enable handling new tables/docs without retraining |
 | **Ongoing** | PII awareness & guardrails | Add detection/redaction of sensitive information; prevent prompt injection |
 | **Ongoing** | Scalability | Distributed caching, horizontal scaling |
 
-> **Note**: I'm currently learning about AI patterns.
+> **Note**: I'm currently learning about agentic AI.
 
 ### Dynamic Database Seeding
 
