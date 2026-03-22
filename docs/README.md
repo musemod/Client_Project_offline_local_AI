@@ -72,7 +72,7 @@ The offline AI system uses a **compound-AI architecture**:
 
 #### Prototype Status & Production Considerations
 
-This system was built in under 2 weeks to **demonstrate architectural patterns**, not to be production-ready. Below is an honest assessment of where it stands and what a production version would require, such a hybrid approach with RAG and fine-tuned LLMs:
+This system was built in under 2 weeks to **demonstrate architectural patterns**, not to be production-ready. Below is an honest assessment of where it stands and what a production version would require, such a hybrid approach with RAG and fine-tuned LLMs. Although this is an offline system, perhaps some security and privacy guardrails should still be in place:
 
 | Layer | Current Implementation | What Production Would Add |
 |-------|------------------------|---------------------------|
@@ -89,7 +89,7 @@ This system was built in under 2 weeks to **demonstrate architectural patterns**
 - Complete end-to-end pipeline from query to response
 - Model specialization (option for separate models for SQL, response & evaluation)
 - Non-blocking evaluation preserves user experience
-- Local-first ensures data privacy and no API costs
+- Local-first ensures no API costs and protects data privacy
 
 ### What I'd Explore Next
 
