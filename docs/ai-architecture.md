@@ -102,9 +102,9 @@ The JUDGE_MODEL operates asynchronously, not blocking user response:
 | **Non-blocking evaluation** | Users get immediate responses | Quality feedback is delayed |
 | **Local-only models** | Data privacy, no API costs | Limited to 7B parameter models |
 | **5-minute TTL cache** | Simple implementation | Misses semantic similarities |
-| **Dual-purpose response/judge model** | Reduces resource requirements | May compromise performance of both tasks |
+| **Dual-purpose response/judge model** | Reduces resource requirements | Likely compromises performance of both tasks |
 | **In-memory caching** | Fast, simple for prototype | **Does not scale** beyond small datasets (RAM limits, no distribution) |
-| **Rule-based complexity scoring** | Zero-cost, transparent routing | **Brittle at scale** - misses novel query patterns; would need ML-based classifier for production |
+| **Rule-based complexity scoring** | Zero-cost, transparent routing | **Brittle at scale** - misses novel query patterns; would need better classifier for production |
 
 
 ### Caching Strategy
@@ -114,21 +114,7 @@ The JUDGE_MODEL operates asynchronously, not blocking user response:
 | **Type** | In-memory, exact-match | Semantic + partial caching |
 | **TTL** | 5 minutes | Variable based on data freshness needs |
 | **Scope** | Full query results | Partial results, embeddings |
-| **Scale Limitation** | Works only with small datasets | Would need Redis/Memcached, sharding, and eviction policies |
-
-### Human-in-the-Loop Considerations
-
-For production deployment, this system would benefit from human-in-the-loop validation:
-
-**Minimal HITL implementation**:
-1. **Confidence scoring**: Flag low-quality SQL for human review
-2. **Review queue**: Simple interface for verifying uncertain queries
-3. **Feedback loop**: Use corrections to augment training data
-
-**Where HITL adds value**:
-- **Edge cases**: Novel query patterns the model hasn't seen
-- **Business rules**: Nuanced logic an LLM might miss
-- **Trust building**: Users gain confidence when they see human oversight
+| **Scale Limitation** | Works only with small datasets | Would need Redis or Memcached, sharding, and eviction policies |
 
 ### Production Roadmap
 
@@ -136,20 +122,20 @@ If this were moving to production, I'd prioritize:
 
 | Phase | Focus | Key Improvements |
 |-------|-------|------------------|
-| **Phase 1** | Accuracy | Fine-tune models on actual query logs; add confidence scoring; basic human review for edge cases |
-| **Phase 2** | Scale | Replace in-memory cache with Redis; add semantic caching; implement query logging for analysis |
-| **Phase 3** | Reliability | Add self-correction loop (execute SQL, catch errors, regenerate); monitoring and alerting |
-| **Phase 4** | Security & Privacy | Add PII detection/redaction; output guardrails; rate limiting |
-| **Phase 5** | Continuous Improvement | Use human corrections to augment training data; A/B test model improvements |
+| **Phase 1** | Accuracy | Add RAG and fine-tune models on actual query logs; add confidence scoring; basic human review for edge cases |
+| **Phase 2** | Reliability | Add observability, better evaluation, governance. Log everything, catch errors, regenerate; monitoring and alerting |
+| **Phase 3** | Consider adding Security & Privacy layer | Add PII detection/redaction; output guardrails if any chance data might be exposed to internet, even though this application runs locally and offline 
+| **Phase 4** | Continuous Improvement | Use human feedback to augment training data |
+| **Phase 5** | Scale | Replace in-memory cache with Redis; add semantic caching; implement query logging for analysis |
 
 ### What I'm Still Learning
 
-This project sparked curiosity about what comes next. I'm actively exploring:
+This project sparked curiosity about what comes next for future projects. I'm actively exploring:
 
 | Topic | Why It Matters |
 |-------|----------------|
 | **Semantic caching** | Moving beyond exact-match to cache by meaning - critical for production scale |
-| **Agentic AI patterns** | Moving from single-turn SQL generation to agents that self-correct, ask questions, and choose tools |
+| **Agentic AI** | Moving from single-turn SQL generation to using an AI agent that can plan, decompose tasks, interact with filesystems, spawn sub-agents, call tools and use skills in a self-correcting loop |
 | **Agent observability** | Understanding why an agent failed or what decision it made |
 | **PII handling** | Protecting user data isn't optional - learning detection/redaction patterns |
 | **Guardrails** | Preventing prompt injection and inappropriate outputs before they reach users |

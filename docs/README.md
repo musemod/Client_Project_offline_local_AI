@@ -18,7 +18,7 @@ This prototype was built as part of a client-student partnership through Codesmi
 
 This is my fork of OSP1-ClientProject. The original project can be found at: [https://github.com/kevinortiz43/Customer-support-AI-powered-product](https://github.com/kevinortiz43/Customer-support-AI-powered-product)
 
-I architected the offline/local AI branch feature (backend), drove the project's cache-aside strategy, and orchestrated its OS-agnostic ETL pipeline for dynamically seeding the PostgreSQL database.
+I architected an experimental offline/local AI branch feature (backend), drove the project's cache-aside strategy, and orchestrated its OS-agnostic ETL pipeline for dynamically seeding the PostgreSQL database.
 
 The goal was building a responsive AI chatbot using only free, open-source models running locally. Free models aren't as powerful as paid ones. Many of them on HuggingFace have no inference providers available so can only be run if downloaded directly. The question was: how useful could they be?
 
@@ -72,14 +72,14 @@ The offline AI system uses a **compound-AI architecture**:
 
 #### Prototype Status & Production Considerations
 
-This system was built in under two weeks to **demonstrate architectural patterns**, not to be production-ready. Below is an honest assessment of where it stands and what a production version would require:
+This system was built in under 2 weeks to **demonstrate architectural patterns**, not to be production-ready. Below is an honest assessment of where it stands and what a production version would require, such a hybrid approach with RAG and fine-tuned LLMs:
 
 | Layer | Current Implementation | What Production Would Add |
 |-------|------------------------|---------------------------|
 | **Models** | Model 1 handles SQL generation, Model 2 handles response formatting & evaluation | Specialized fine-tuned models for each task with higher accuracy |
 | **Context Strategy** | In-context learning (schema + examples in prompt) | RAG for dynamic/large schemas |
 | **Security** | Basic SQL execution with SELECT-only enforcement | AI gateway with prompt injection detection, SQL injection prevention |
-| **Validation** | LLM-as-Judge (asynchronous) with result count verification | Human-in-the-loop validation + semantic correctness metrics |
+| **Validation** | LLM-as-Judge (asynchronous) with result count verification | Human-in-the-loop evaluation, handling complex or edge cases + semantic correctness metrics |
 | **Caching** | Dual-layer: exact query match + keyword-based result caching (5-min TTL) | Semantic caching (cache by meaning) + partial result caching |
 | **Data Privacy** | Full result visibility with SELECT-only restriction | PII redaction, row-level security, output guardrails |
 | **Post-processing** | Regex-based SQL cleaning to handle model hallucinations | Fine-tuning reduces need for post-processing |
@@ -87,7 +87,7 @@ This system was built in under two weeks to **demonstrate architectural patterns
 
 **What Works Now**:
 - Complete end-to-end pipeline from query to response
-- Model specialization (separate models for SQL, dual-purpose model for response & evaluation)
+- Model specialization (option for separate models for SQL, response & evaluation)
 - Non-blocking evaluation preserves user experience
 - Local-first ensures data privacy and no API costs
 
@@ -95,15 +95,12 @@ This system was built in under two weeks to **demonstrate architectural patterns
 
 | Priority | Direction | Why It Matters |
 |----------|-----------|----------------|
-| **Immediate** | Fine-tuning on real queries | Replace generic models with versions trained on actual usage patterns for higher accuracy |
-| **Immediate** | Human-in-the-loop validation | Flag low-confidence SQL for human review; use corrections to continuously improve |
+| **Immediate** | Determine which RAG design is best for use case (likely involves hybrid search, reranking layer, structured metadata filtering) | RAG would enable handling new data without retraining but has trade-offs (memory drift, increased token usage, extra latency, extra costs and complexity) |
+| **Immediate** | Fine-tune specialized models (determine how small these can be) | Replace generic models with versions trained on actual usage patterns for higher accuracy |
+| **Immediate** | Add observability layer, possibly governance | Need tracing, logging, and way to ensure only updated, authorized docs are in vector DB |
+| **Immediate** | Improve evaluation layer | Flag low-confidence SQL for human review; use corrections to continuously improve |
 | **Near-term** | Semantic caching | Cache based on query meaning rather than exact text to improve hit rates at scale |
-| **Near-term** | Agentic AI patterns | Evolve from single-turn SQL generation to agents that self-correct, ask questions, and handle multi-step queries |
-| **Near-term** | RAG for dynamic schemas | Current in-context learning for fixed schema; RAG would enable handling new tables/docs without retraining |
-| **Ongoing** | PII awareness & guardrails | Add detection/redaction of sensitive information; prevent prompt injection |
 | **Ongoing** | Scalability | Distributed caching, horizontal scaling |
-
-> **Note**: I'm currently learning about agentic AI.
 
 ### Dynamic Database Seeding
 
