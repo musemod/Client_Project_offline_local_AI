@@ -16,9 +16,11 @@ This prototype was built as part of a client-student partnership through Codesmi
 
 ## Overview
 
-This is my fork of OSP1-ClientProject. The original project can be found at: [https://github.com/kevinortiz43/Customer-support-AI-powered-product](https://github.com/kevinortiz43/Customer-support-AI-powered-product)
+This is my branch from [https://github.com/kevinortiz43/Customer-support-AI-powered-product](https://github.com/kevinortiz43/Customer-support-AI-powered-product). 
 
-I architected an experimental offline/local AI branch feature (backend), drove the project's cache-aside strategy, and orchestrated its OS-agnostic ETL pipeline for dynamically seeding the PostgreSQL database.
+Note: I'm currently collaborating with another team who worked independently with the same client but worked on other features -- GraphQL (whereas ours is REST API), StencilJS. They have expressed interest to integrate my AI chatbot feature.
+
+For the original project, I architected an experimental offline/local AI branch feature (backend), drove the project's cache-aside strategy, and orchestrated its OS-agnostic ETL pipeline for dynamically seeding the PostgreSQL database.
 
 The goal was building a responsive AI chatbot using only free, open-source models running locally. Free models aren't as powerful as paid ones. Many of them on HuggingFace have no inference providers available so can only be run if downloaded directly. The question was: how useful could they be?
 
