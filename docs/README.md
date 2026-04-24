@@ -18,8 +18,6 @@ This prototype was built as part of a client-student partnership through Codesmi
 
 This is my branch from [https://github.com/kevinortiz43/Customer-support-AI-powered-product](https://github.com/kevinortiz43/Customer-support-AI-powered-product). 
 
-Note: I'm currently collaborating with another team who worked independently with the same client but worked on other features -- GraphQL (whereas ours is REST API), StencilJS. They have expressed interest to integrate my AI chatbot feature.
-
 For the original project, I architected an experimental offline/local AI branch feature (backend), drove the project's cache-aside strategy, and orchestrated its OS-agnostic ETL pipeline for dynamically seeding the PostgreSQL database.
 
 The goal was building a responsive AI chatbot using only free, open-source models running locally. Free models aren't as powerful as paid ones. Many of them on HuggingFace have no inference providers available so can only be run if downloaded directly. The question was: how useful could they be?
@@ -42,25 +40,25 @@ This setup includes a preloading script for seamless model switching. Both model
 - **Local inference**: No external API dependencies
 - **Open source model comparison**: Evaluate performance of freely available models
 - **GPU acceleration**: Optional GPU support (see docker-compose.yml)
-- **Model preloading**: Optional script to pre-load both models
-- **Hot-swappable models**: Switch models at runtime without restart
+- **Model preloading**: Optional Linux script to pre-load both models
+- **Hot-swappable models**: Optional Linux script to switch models at runtime without restart
 
 ## Architecture Summary
 
 ### High-Level Patterns
 
 - **Cache-aside pattern**: Optimize for frequent queries
-- **Query routing**: Keyword text search vs AI path
-- **Text-to-SQL model**: Natural language to database queries
+- **Query routing**: Keyword text search for simple queries vs AI path for complex queries
+- **Text-to-SQL model**: Natural language to SQL query AI conversion
 - **Response generation model**: SQL results to human-readable text
 - **LLM-as-Judge**: Automated quality evaluation
 - **Non-blocking evaluation**: Async result scoring
-- **Dynamic database seeding**: Automated ETL pipeline
+- **Dynamic database seeding**: Automated ETL pipeline (OS-agnostic)
 
 ### AI Implementation
 
-The offline AI system uses a **compound-AI architecture**:
-- **Text-to-SQL model** (7B): Translates natural language to PostgreSQL queries
+The offline AI system uses:
+- **Text-to-SQL model** (7B): Translates natural language to SQL queries
 - **Response model** (7B): Formats raw results into conversational answers
 - **Judge model**: Asynchronously evaluates SQL quality without blocking users
 
@@ -81,15 +79,14 @@ This system was built in under 2 weeks to **demonstrate architectural patterns**
 | **Models** | Model 1 handles SQL generation, Model 2 handles response formatting & evaluation | Specialized fine-tuned models for each task with higher accuracy |
 | **Context Strategy** | In-context learning (schema + examples in prompt) | RAG for dynamic/large schemas |
 | **Security** | Basic SQL execution with SELECT-only enforcement | AI gateway with prompt injection detection, SQL injection prevention |
-| **Validation** | LLM-as-Judge (asynchronous) with result count verification | Human-in-the-loop evaluation, handling complex or edge cases + semantic correctness metrics |
-| **Caching** | Dual-layer: exact query match + keyword-based result caching (5-min TTL) | Semantic caching (cache by meaning) + partial result caching |
-| **Data Privacy** | Full result visibility with SELECT-only restriction | PII redaction, row-level security, output guardrails |
+| **Validation** | LLM-as-Judge (asynchronous) with results count verification | Human-in-the-loop evaluation, handling complex or edge cases + semantic correctness metrics |
+| **Caching** | Exact query match and in-memory API response caching (5-min TTL) | Semantic caching (cache by meaning) + partial result caching |
 | **Post-processing** | Regex-based SQL cleaning to handle model hallucinations | Fine-tuning reduces need for post-processing |
 | **Scalability** | In-memory cache, single-node, rule-based routing | Distributed cache (Redis), horizontal scaling
 
 **What Works Now**:
 - Complete end-to-end pipeline from query to response
-- Model specialization (option for separate models for SQL, response & evaluation)
+- Model specialization (option for separate models for SQL generation, response generation & evaluation)
 - Non-blocking evaluation preserves user experience
 - Local-first ensures no API costs and protects data privacy
 
