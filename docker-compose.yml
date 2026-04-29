@@ -42,6 +42,7 @@ services:
     volumes:
       - ${OLLAMA_MODELS_PATH:-/home/cynth/ollama_models_shared}:/root/.ollama/models # Docker volume to bind mount pointing to a local shared models folder 
     # - ollama_models:/root/.ollama # persists downloaded models
+    # NOTE: we should remove hard-coded models path and put env variable instead
     init: true # handles zombie processes, recommended for containers
     deploy: # deploy (lines 46-52) is more modern syntax vs. runtime: nvidia (legacy) but does the same thing
       resources:
@@ -126,7 +127,7 @@ services:
     shm_size: 128mb
     environment:
       POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
+      POSTGRES_PASSWORD: root # NOTE: we'd remove these hard-coded passwords (since not really secure)
       POSTGRES_DB: test_db
     ports:
       - "5432:5432"
