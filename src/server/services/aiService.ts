@@ -18,9 +18,8 @@ import {
  * 
  * Why Not RAG or Agentic AI:
  * - Small, focused dataset (3 tables, <50 total rows) fits entirely in context window
- * - Two-week development timeline prioritized working pipeline over complex architecture
- * - RAG would add latency with minimal benefit for this data size
- * - Agentic systems require additional model calls, increasing VRAM pressure
+ * - Two-week development timeline prioritized working pipeline over complex architecture (RAG is recommended to add later for accuracy)
+ * - Agentic systems require additional model calls, add more unpredictability, increases VRAM pressure
  * - Current approach provides immediate feedback for prompt engineering
  * 
  * When to Upgrade:
