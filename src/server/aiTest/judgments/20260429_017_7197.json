@@ -1,0 +1,14 @@
+{
+  "id": "d60e6e31-f3fe-4c3c-a25d-c84906537197",
+  "timestamp": "2026-04-29T23:06:23.139Z",
+  "naturalLanguageQuery": "find controls updated in January 2026",
+  "generatedSQL": "SELECT \"short\", \"long\" \nFROM \"allTrustControls\" \nWHERE strftime('%Y-%m', \"updatedAt\") = '2026-01';",
+  "resultsCount": 0,
+  "passed": false,
+  "score": 1,
+  "explanation": "Query returned no results - not enough data to tell if correct or not",
+  "source": "ai",
+  "executionTime": 1612,
+  "sqlModel": "arctic-text2sql:latest",
+  "judgeModel": "qwen2.5-coder:7b"
+}

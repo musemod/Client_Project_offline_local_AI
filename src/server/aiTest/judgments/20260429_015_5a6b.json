@@ -1,0 +1,14 @@
+{
+  "id": "62b039c0-b6aa-43f3-8ec2-8eb2fa855a6b",
+  "timestamp": "2026-04-29T22:50:53.633Z",
+  "naturalLanguageQuery": "what are the longest response times for the security team",
+  "generatedSQL": "SELECT MAX(\"responseTimeHours\") AS max_response \nFROM \"allTeams\" \nWHERE \"category\" ILIKE 'Security' AND \"isActive\" = TRUE;",
+  "resultsCount": 1,
+  "passed": true,
+  "score": 4,
+  "explanation": "|| , The SQL query is well-structured and efficiently retrieves the maximum response time for the security team. It uses the ILIKE operator to match the category case-insensitively and filters by active status.",
+  "source": "ai",
+  "executionTime": 8060,
+  "sqlModel": "arctic-text2sql:latest",
+  "judgeModel": "qwen2.5-coder:7b"
+}

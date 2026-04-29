@@ -1,0 +1,14 @@
+{
+  "id": "835bb79d-609f-4501-a2fd-0d06dc963d95",
+  "timestamp": "2026-04-29T22:27:11.101Z",
+  "naturalLanguageQuery": "find team members whose last name starts with H",
+  "generatedSQL": "SELECT \"firstName\", \"lastName\", \"role\" FROM \"allTeams\" WHERE \"lastName\" LIKE 'H%';",
+  "resultsCount": 2,
+  "passed": true,
+  "score": 4,
+  "explanation": "The SQL query is correct and efficiently retrieves team members whose last names start with 'H'. It uses the LIKE operator to match any string that starts with 'H', which is a common requirement for filtering data based on prefixes. The query is straightforward, easy to understand, and performs its intended function well.",
+  "source": "ai",
+  "executionTime": 5033,
+  "sqlModel": "arctic-text2sql:latest",
+  "judgeModel": "qwen2.5-coder:7b"
+}

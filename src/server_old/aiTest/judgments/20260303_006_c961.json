@@ -1,0 +1,16 @@
+{
+  "id": "6e38b7d2-3ace-487f-a494-5bd4f524c961",
+  "timestamp": "2026-03-03T12:12:40.836Z",
+  "naturalLanguageQuery": "show me controls and faqs about api security",
+  "generatedSQL": "SELECT * FROM api_security_controls WHERE \"category\" ILIKE 'Authentication' AND status = 'active';",
+  "expectedSQL": "SELECT 'control' as type, \"short\", \"long\" FROM \"allTrustControls\" WHERE \"searchText\" ILIKE '%api%' UNION ALL SELECT 'faq' as type, \"question\", \"answer\" FROM \"allTrustFaqs\" WHERE \"searchText\" ILIKE '%api%';",
+  "resultsCount": 0,
+  "expectedCount": ">=2",
+  "passed": false,
+  "score": 1,
+  "explanation": "No results, expected >=2",
+  "source": "ai",
+  "executionTime": 1415,
+  "sqlModel": "distil-qwen3-4b:latest",
+  "judgeModel": "qwen2.5-coder:7b"
+}

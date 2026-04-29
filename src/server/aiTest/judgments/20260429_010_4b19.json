@@ -1,0 +1,16 @@
+{
+  "id": "164562fc-d95a-47eb-a739-aca869354b19",
+  "timestamp": "2026-04-29T22:40:44.877Z",
+  "naturalLanguageQuery": "find controls related to incident response in organizational security",
+  "generatedSQL": "SELECT \"short\", \"long\" \nFROM \"allTrustControls\" \nWHERE \"category\" = 'Organizational Security' \n  AND (\"searchText\" LIKE '%incident%' OR \"searchText\" LIKE '%response%');",
+  "expectedSQL": "SELECT * FROM \"allTrustControls\" WHERE \"category\" ILIKE 'Organizational Security' AND (\"short\" ILIKE '%incident%' OR \"long\" ILIKE '%incident%');",
+  "resultsCount": 1,
+  "expectedCount": ">=1",
+  "passed": true,
+  "score": 5,
+  "explanation": "Count OK: got 1, expected >=1",
+  "source": "ai",
+  "executionTime": 1601,
+  "sqlModel": "arctic-text2sql:latest",
+  "judgeModel": "qwen2.5-coder:7b"
+}

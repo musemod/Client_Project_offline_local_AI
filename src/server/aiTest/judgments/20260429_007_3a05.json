@@ -1,0 +1,14 @@
+{
+  "id": "6ab71614-0d3b-4fa8-86f4-55a343683a05",
+  "timestamp": "2026-04-29T22:37:22.957Z",
+  "naturalLanguageQuery": "show me controls and their categories sorted by name",
+  "generatedSQL": "SELECT \"short\", \"category\" FROM \"allTrustControls\" ORDER BY \"short\";",
+  "resultsCount": 20,
+  "passed": true,
+  "score": 4,
+  "explanation": "The SQL query is correct and achieves the user's request. It selects the 'short' and 'category' columns from the 'allTrustControls' table and orders the results by the 'short' column. The score is 4 because it is a well-formed query that meets the user's needs, but it could be improved by using aliases for the columns to make the output more readable.",
+  "source": "ai",
+  "executionTime": 860,
+  "sqlModel": "arctic-text2sql:latest",
+  "judgeModel": "qwen2.5-coder:7b"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "f20794bd-e881-4402-a801-dd73d15ce4e2",
+  "timestamp": "2026-04-29T22:39:54.772Z",
+  "naturalLanguageQuery": "3rd party penetration",
+  "generatedSQL": "SELECT 'control' as type, \"short\", \"long\" \nFROM \"allTrustControls\" \nWHERE \"searchText\" ILIKE '%3rd party%' \nUNION ALL \nSELECT 'faq' as type, \"question\", \"answer\" \nFROM \"allTrustFaqs\" \nWHERE \"searchText\" ILIKE '%3rd party%';",
+  "resultsCount": 0,
+  "passed": false,
+  "score": 1,
+  "explanation": "Query returned no results - not enough data to tell if correct or not",
+  "source": "ai",
+  "executionTime": 2264,
+  "sqlModel": "arctic-text2sql:latest",
+  "judgeModel": "qwen2.5-coder:7b"
+}

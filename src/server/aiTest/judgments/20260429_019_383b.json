@@ -1,0 +1,16 @@
+{
+  "id": "e86127dc-8670-46c1-a61b-8dcf023c383b",
+  "timestamp": "2026-04-29T23:07:09.241Z",
+  "naturalLanguageQuery": "show me all active team members related to data security or secure development",
+  "generatedSQL": "SELECT \"firstName\", \"lastName\", \"role\" \nFROM \"allTeams\" \nWHERE (\"category\" ILIKE 'Data Security' OR \"category\" ILIKE 'Secure Development') \nAND \"isActive\" = true;",
+  "expectedSQL": "SELECT * FROM \"allTeams\" WHERE (\"category\" ILIKE 'Data Security' OR \"category\" ILIKE 'Secure Development') AND \"isActive\" = true;",
+  "resultsCount": 3,
+  "expectedCount": ">=3",
+  "passed": true,
+  "score": 5,
+  "explanation": "Count OK: got 3, expected >=3",
+  "source": "ai",
+  "executionTime": 1594,
+  "sqlModel": "arctic-text2sql:latest",
+  "judgeModel": "qwen2.5-coder:7b"
+}

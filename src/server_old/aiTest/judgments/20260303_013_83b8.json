@@ -1,0 +1,16 @@
+{
+  "id": "26eb5db1-5612-49ac-a0e0-dc18ee0f83b8",
+  "timestamp": "2026-03-03T12:51:12.607Z",
+  "naturalLanguageQuery": "list controls that mention both aws and data",
+  "generatedSQL": "SELECT DISTINCT control_name FROM compliance_controls WHERE control_name LIKE '%aws%' AND control_name LIKE '%data%';",
+  "expectedSQL": "SELECT * FROM \"allTrustControls\" WHERE \"searchText\" ILIKE '%aws%' AND \"searchText\" ILIKE '%data%';",
+  "resultsCount": 0,
+  "expectedCount": ">=1",
+  "passed": false,
+  "score": 1,
+  "explanation": "No results, expected >=1",
+  "source": "ai",
+  "executionTime": 242,
+  "sqlModel": "arctic-text2sql:latest",
+  "judgeModel": "qwen2.5-coder:7b"
+}

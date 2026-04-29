@@ -18,6 +18,7 @@ router.get("test", ({ _body, set }) => {
   return "test";
 });
 
+// http://localhost:3000/api/trustControls
 router.get("/trustControls", async ({ error }) => {
   try {
     const result = await dataService.getControls();
@@ -40,7 +41,7 @@ router.get("/trustControls", async ({ error }) => {
   }
 });
 
-
+// http://localhost:3000/api/allTeams
 router.get("/allTeams", async ({ error }) => {
   try {
     const result = await dataService.getTeams();
@@ -63,6 +64,7 @@ router.get("/allTeams", async ({ error }) => {
   }
 });
 
+// http://localhost:3000/api/trustFaqs
 router.get("/trustFaqs", async ({ error }) => {
   try {
     const result = await dataService.getFaqs();

@@ -1,0 +1,16 @@
+{
+  "id": "b7eeacde-07bc-4fe3-bd9e-6e784a53f601",
+  "timestamp": "2026-04-29T22:48:39.466Z",
+  "naturalLanguageQuery": "find all controls and faqs about privacy",
+  "generatedSQL": "SELECT 'control' as type, \"short\", \"long\" \nFROM \"allTrustControls\" \nWHERE \"category\" ILIKE 'Privacy' \nUNION ALL \nSELECT 'faq' as type, \"question\", \"answer\" \nFROM \"allTrustFaqs\" \nWHERE \"category\" ILIKE 'Privacy';",
+  "expectedSQL": "SELECT 'control' as type, \"short\" as title, \"long\" as content FROM \"allTrustControls\" WHERE \"category\" ILIKE 'Privacy' UNION ALL SELECT 'faq' as type, \"question\" as title, \"answer\" as content FROM \"allTrustFaqs\" WHERE \"category\" ILIKE 'Privacy';",
+  "resultsCount": 3,
+  "expectedCount": ">=3",
+  "passed": true,
+  "score": 5,
+  "explanation": "Count OK: got 3, expected >=3",
+  "source": "ai",
+  "executionTime": 2029,
+  "sqlModel": "arctic-text2sql:latest",
+  "judgeModel": "qwen2.5-coder:7b"
+}

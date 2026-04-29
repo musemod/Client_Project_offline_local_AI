@@ -1,0 +1,14 @@
+{
+  "id": "e9887414-d34e-4ff3-893c-a1f7d0e35699",
+  "timestamp": "2026-04-29T22:34:17.035Z",
+  "naturalLanguageQuery": "who are the technical delivery managers and what controls are they responsible for",
+  "generatedSQL": "SELECT DISTINCT T1.\"firstName\", T1.\"lastName\", T2.\"short\" FROM \"allTeams\" AS T1 INNER JOIN \"allTrustControls\" AS T2 ON T1.\"category\" = T2.\"category\" WHERE T1.\"role\" ILIKE 'Technical Delivery Manager' AND T1.\"isActive\" = true;",
+  "resultsCount": 0,
+  "passed": false,
+  "score": 1,
+  "explanation": "Query returned no results - not enough data to tell if correct or not",
+  "source": "ai",
+  "executionTime": 770,
+  "sqlModel": "arctic-text2sql:latest",
+  "judgeModel": "qwen2.5-coder:7b"
+}

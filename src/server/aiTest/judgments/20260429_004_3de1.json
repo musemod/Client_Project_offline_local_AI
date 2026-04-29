@@ -1,0 +1,16 @@
+{
+  "id": "8973f39e-503a-4e09-9e88-3323951e3de1",
+  "timestamp": "2026-04-29T22:30:14.547Z",
+  "naturalLanguageQuery": "show me controls and faqs about api security",
+  "generatedSQL": "SELECT 'control' as type, \"short\", \"long\" \nFROM \"allTrustControls\" \nWHERE \"searchText\" ILIKE '%api%' \nUNION ALL \nSELECT 'faq' as type, \"question\", \"answer\" \nFROM \"allTrustFaqs\" \nWHERE \"searchText\" ILIKE '%api%';",
+  "expectedSQL": "SELECT 'control' as type, \"short\", \"long\" FROM \"allTrustControls\" WHERE \"searchText\" ILIKE '%api%' UNION ALL SELECT 'faq' as type, \"question\", \"answer\" FROM \"allTrustFaqs\" WHERE \"searchText\" ILIKE '%api%';",
+  "resultsCount": 2,
+  "expectedCount": ">=2",
+  "passed": true,
+  "score": 5,
+  "explanation": "Count OK: got 2, expected >=2",
+  "source": "ai",
+  "executionTime": 1963,
+  "sqlModel": "arctic-text2sql:latest",
+  "judgeModel": "qwen2.5-coder:7b"
+}

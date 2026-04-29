@@ -1,0 +1,14 @@
+{
+  "id": "85c3762b-1f45-424c-8075-2f564810b58c",
+  "timestamp": "2026-04-29T23:06:43.278Z",
+  "naturalLanguageQuery": "show me controls that don't have any FAQs in the same category",
+  "generatedSQL": "SELECT DISTINCT \"short\", \"long\"\nFROM \"allTrustControls\" AS c\nWHERE NOT EXISTS (\n  SELECT 1\n  FROM \"allTrustFaqs\" AS f\n  WHERE f.\"category\" = c.\"category\"\n    AND f.\"id\" IN (c.\"id\")\n);",
+  "resultsCount": 20,
+  "passed": true,
+  "score": 4,
+  "explanation": "|| , The SQL query is well-structured and efficient. It uses a subquery with NOT EXISTS to filter out rows from 'allTrustControls' where there are corresponding rows in 'allTrustFaqs' with the same category and id.",
+  "source": "ai",
+  "executionTime": 4933,
+  "sqlModel": "arctic-text2sql:latest",
+  "judgeModel": "qwen2.5-coder:7b"
+}

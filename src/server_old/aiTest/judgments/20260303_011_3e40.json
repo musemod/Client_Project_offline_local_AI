@@ -1,0 +1,16 @@
+{
+  "id": "c16b6fc1-7914-4265-a98b-76c17a143e40",
+  "timestamp": "2026-03-03T12:35:06.739Z",
+  "naturalLanguageQuery": "how many controls are in each category",
+  "generatedSQL": "SELECT \"category\", COUNT(*) AS control_count\nFROM controls\nGROUP BY \"category\";",
+  "expectedSQL": "SELECT \"category\", COUNT(*) as control_count FROM \"allTrustControls\" GROUP BY \"category\";",
+  "resultsCount": 0,
+  "expectedCount": ">=6",
+  "passed": false,
+  "score": 1,
+  "explanation": "No results, expected >=6",
+  "source": "ai",
+  "executionTime": 4839,
+  "sqlModel": "arctic-text2sql:latest",
+  "judgeModel": "qwen2.5-coder:7b"
+}

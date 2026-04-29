@@ -1,0 +1,16 @@
+{
+  "id": "24d032dc-66e6-44e8-b831-c215916a056d",
+  "timestamp": "2026-04-29T22:34:31.635Z",
+  "naturalLanguageQuery": "list all cloud security controls",
+  "generatedSQL": "SELECT \"short\", \"long\" \nFROM \"allTrustControls\" \nWHERE \"category\" = 'Cloud Security';",
+  "expectedSQL": "SELECT * FROM \"allTrustControls\" WHERE \"category\" ILIKE 'Cloud Security';",
+  "resultsCount": 3,
+  "expectedCount": ">=3",
+  "passed": true,
+  "score": 5,
+  "explanation": "Count OK: got 3, expected >=3",
+  "source": "ai",
+  "executionTime": 1037,
+  "sqlModel": "arctic-text2sql:latest",
+  "judgeModel": "qwen2.5-coder:7b"
+}
