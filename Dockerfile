@@ -28,7 +28,7 @@ COPY --chown=appuser:bunjs package.json ./
 
 USER appuser
 EXPOSE 3000
-CMD ["bun", "run", "dev"]
+CMD ["bun", "run", "start"]
 
 # Dev stage
 FROM base AS dev
